@@ -1,20 +1,21 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+# coding=utf-8
 
 ## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## 
+##
 ## This file is part of RawSpeechClassification.
-## 
+##
 ## RawSpeechClassification is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 3 as
 ## published by the Free Software Foundation.
-## 
+##
 ## RawSpeechClassification is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
@@ -48,7 +49,7 @@ class wav2feat:
         self.numFeats, self.numUtterances, self.numLabels = self.checkList(self.wavLabListFile)
 
         self.inputFeatDim = self.param['windowLengthSamples']
-        self.outputFeatDim=1 if self.numLabels==2 else self.numLabels 
+        self.outputFeatDim=1 if self.numLabels==2 else self.numLabels
 
     ## Exit
     def __exit__ (self):
@@ -58,11 +59,11 @@ class wav2feat:
     def extract (self, wavepath):
         ## Read data and labels
         fs, data = wav.read(wavepath)
-    
+
         ## Append zeros to data if necessary (we add dither later)
         if len(data) < self.param['windowLengthSamples']:
             data = numpy.concatenate([data, numpy.zeros(self.param['windowLengthSamples']-len(data))])
-    
+
         ## Determine the number of frames, each of windowshift length
         numFeats = (len(data)-self.param['windowLengthSamples'])//self.param['windowShiftSamples']+1
 
@@ -71,10 +72,10 @@ class wav2feat:
         feat = numpy.lib.stride_tricks.as_strided(data, shape=(numFeats, self.param['windowLengthSamples']), \
                 strides=(self.param['windowShiftSamples']*stride,stride))
         feat = feat.astype(numpy.float32)
-    
+
         ## Add dither
         feat += numpy.random.randn(numFeats, self.param['windowLengthSamples'])
-    
+
         ## Mean normalise feature matrix
         feat = (feat.T - feat.mean(axis=-1)).T
 
@@ -88,14 +89,14 @@ class wav2feat:
         numUtterances = 0
         for wl in self.wll:
             w,l = wl.split()
-            
+
             with wave.open(w) as f:
                 ## Check number of channels and sampling rate
                 assert f.getnchannels()==1, 'ERROR: {:s} has multiple channels. Modify the code accordingly and re-run'.format(w)
                 assert f.getframerate()==self.param['fs'], 'ERROR: Sampling frequency mismatch with {:s}: '\
                         'expected {:f}, got {:f}'.format(w, self.param['fs'], f.getframerate())
                 N = f.getnframes()
-                
+
             numFeats += max((N-self.param['windowLengthSamples'])//self.param['windowShiftSamples']+1, 1)
             numUtterances += 1
             labels.update(l)
@@ -115,7 +116,7 @@ class wav2feat:
         print(self.info)
         infoFile = '{:s}/info.npy'.format(self.featDir)
         numpy.save(infoFile, self.info)
-       
+
         self.wll.seek(0) ## In case the object is used as iterator before calling this routine
         for self.splitDataCounter in range(1,self.numSplit+1):
             self.saveNextSplitData()
@@ -138,7 +139,7 @@ class wav2feat:
             uttList,featList,labelList = map(list,zip(*featLabList))
             featFile = '{:s}/{:d}.x.h5'.format(self.featDir, self.splitDataCounter)
             labelFile = '{:s}/{:d}.y.h5'.format(self.featDir, self.splitDataCounter)
-            
+
             ## Save features
             with h5py.File(featFile, 'w') as f:
                 for i,feat in enumerate(featList):
@@ -168,4 +169,3 @@ if __name__ == '__main__':
 
     w2f = wav2feat(wavLabListFile, featDir=featDir, mode=mode)
     w2f.prepareFeatDir()
-

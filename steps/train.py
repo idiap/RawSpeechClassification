@@ -1,20 +1,21 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+# coding=utf-8
 
 ## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## 
+##
 ## This file is part of RawSpeechClassification.
-## 
+##
 ## RawSpeechClassification is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 3 as
 ## published by the Free Software Foundation.
-## 
+##
 ## RawSpeechClassification is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
@@ -67,7 +68,7 @@ m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 loss = 'binary_crossentropy' if trGen.outputFeatDim==1 else 'sparse_categorical_crossentropy'
 m.compile(loss=loss, optimizer=s, metrics=['accuracy'])
 print ('Learning rate: %f' % learning['rate'])
-h = [m.fit_generator (trGen, steps_per_epoch=trGen.numSteps, 
+h = [m.fit_generator (trGen, steps_per_epoch=trGen.numSteps,
         validation_data=cvGen, validation_steps=cvGen.numSteps,
         epochs=learning['minEpoch']-1, verbose=2)]
 m.save (exp + '/cnn.h5', overwrite=True)
@@ -92,4 +93,3 @@ while learning['lrScaleCount']:
         learning['rate'] *= learning['lrScale']
         learning['lrScaleCount'] -= 1
         K.set_value(m.optimizer.lr, learning['rate'])
-
