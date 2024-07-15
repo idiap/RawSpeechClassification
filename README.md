@@ -7,10 +7,17 @@ processes them. During testing, it computes scores at the
 utterance or speaker levels by averaging the corresponding frame-level
 scores from the fixed length signals.
 
+## Installation
+
+To install the legacy code for Tensorflow 1.12 and CUDA 9.0:
+
+```bash
+conda env create -f conda/legacy.yaml
+```
+
 ## Dependencies
 
 1. Python 3.4+.
-
 2. Keras with Tensorflow/Theano backend.
 
 ## Using the Code
@@ -52,9 +59,9 @@ scores from the fixed length signals.
 
 ## Training Schedule
 
-The script uses stochastic gradient descent with 0.5 momentum. It 
-starts with a learning rate of 0.1 for a minimum of 5 
-epochs. Whenever the validation loss reduces by less than 0.002 
+The script uses stochastic gradient descent with 0.5 momentum. It
+starts with a learning rate of 0.1 for a minimum of 5
+epochs. Whenever the validation loss reduces by less than 0.002
 between successive epochs, the learning rate is halved. Halving
 is performed until the learning rate reaches 1e-7.
 
