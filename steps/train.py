@@ -53,6 +53,7 @@ learning['lrScaleCount'] = int(numpy.ceil(numpy.log(learning['minLr']/learning['
                             numpy.log(learning['lrScale'])))
 
 os.makedirs (exp, exist_ok=True)
+logger = keras.callbacks.CSVLogger(exp + "/log.dat", separator=" ", append=False)
 
 cvGen = rawGenerator (cv_dir, learning['batchSize'])
 trGen = rawGenerator (tr_dir, learning['batchSize'])
@@ -68,9 +69,17 @@ m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 loss = 'binary_crossentropy' if trGen.outputFeatDim==1 else 'sparse_categorical_crossentropy'
 m.compile(loss=loss, optimizer=s, metrics=['accuracy'])
 print ('Learning rate: %f' % learning['rate'])
-h = [m.fit_generator (trGen, steps_per_epoch=trGen.numSteps,
-        validation_data=cvGen, validation_steps=cvGen.numSteps,
-        epochs=learning['minEpoch']-1, verbose=2)]
+h = [
+    m.fit_generator(
+        trGen,
+        steps_per_epoch=trGen.numSteps,
+        validation_data=cvGen,
+        validation_steps=cvGen.numSteps,
+        epochs=learning['minEpoch']-1,
+        verbose=2,
+        callbacks=[logger],
+    )
+]
 m.save (exp + '/cnn.h5', overwrite=True)
 sys.stdout.flush()
 sys.stderr.flush()
@@ -80,10 +89,18 @@ valErrorDiff = 1 + learning['minValError'] ## Initialise
 ## Continue training till validation loss stagnates
 while learning['lrScaleCount']:
     print ('Learning rate: %f' % learning['rate'])
-    h.append (m.fit_generator (trGen, steps_per_epoch=trGen.numSteps,
-            validation_data=cvGen, validation_steps=cvGen.numSteps,
-            epochs=1, verbose=2))
-    m.save (exp + '/cnn.h5', overwrite=True)
+    h.append(
+        m.fit_generator(
+            trGen,
+            steps_per_epoch=trGen.numSteps,
+            validation_data=cvGen,
+            validation_steps=cvGen.numSteps,
+            epochs=1,
+            verbose=2,
+            callbacks=[logger],
+        )
+    )
+    m.save(exp + '/cnn.h5', overwrite=True)
     sys.stdout.flush()
     sys.stderr.flush()
 
