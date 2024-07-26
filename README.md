@@ -9,7 +9,7 @@ scores from the fixed length signals.
 
 ## Installation
 
-To install the legacy code for Tensorflow 1.12 and CUDA 9.0:
+To install the legacy code for Python 3.6, Tensorflow 1.10 and CUDA 9.0, run:
 
 ```bash
 conda env create -f conda/legacy.yaml
