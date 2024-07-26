@@ -53,7 +53,7 @@ learning['lrScaleCount'] = int(numpy.ceil(numpy.log(learning['minLr']/learning['
                             numpy.log(learning['lrScale'])))
 
 os.makedirs (exp, exist_ok=True)
-logger = keras.callbacks.CSVLogger(exp + "/log.dat", separator=" ", append=False)
+logger = keras.callbacks.CSVLogger(exp + "/log.dat", separator=" ", append=True)
 
 cvGen = rawGenerator (cv_dir, learning['batchSize'])
 trGen = rawGenerator (tr_dir, learning['batchSize'])
