@@ -59,7 +59,8 @@ cvGen = rawGenerator (cv_dir, learning['batchSize'])
 trGen = rawGenerator (tr_dir, learning['batchSize'])
 
 ## Initialise learning parameters and models
-s = SGD(lr=learning['rate'], decay=0, momentum=0.5, nesterov=False)
+# s = SGD(lr=learning['rate'], decay=0, momentum=0.5, nesterov=False)
+s = SGD(learning_rate=learning['rate'], weight_decay=0, momentum=0.5, nesterov=False)
 
 ## Initialise model
 numpy.random.seed(512)
