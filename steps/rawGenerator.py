@@ -89,11 +89,11 @@ class rawGenerator:
                 labelFile = '{:s}/{:d}.y.h5'.format(self.featDir, self.splitDataCounter)
 
                 with h5py.File(featFile,'r') as f:
-                    featList = [self.addContextNorm(f[i].value) for i in f]
+                    featList = [self.addContextNorm(f[i][()]) for i in f]
                 x = numpy.vstack(featList)
 
                 with h5py.File(labelFile,'r') as f:
-                    labelList = [f[i].value for i in f]
+                    labelList = [f[i][()] for i in f]
                 y = numpy.hstack(labelList)
 
                 self.x = numpy.concatenate ((self.x[self.batchPointer:], x))
