@@ -3,18 +3,18 @@
 ## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## 
+##
 ## This file is part of RawSpeechClassification.
-## 
+##
 ## RawSpeechClassification is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License version 3 as
 ## published by the Free Software Foundation.
-## 
+##
 ## RawSpeechClassification is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ## GNU General Public License for more details.
-## 
+##
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
@@ -34,8 +34,8 @@ class rawGenerator:
         self.stdFloor = 1e-3
         self.context = (self.spliceSize-1)//2
         infoFile = self.featDir + '/info.npy'
-        self.info = numpy.load(infoFile).item()
-       
+        self.info = numpy.load(infoFile, allow_pickle=True).item()
+
         ## Set attributes from info
         self.numUtterances = self.info['numUtterances']
         self.numFeats = self.info['numFeats']
@@ -49,7 +49,7 @@ class rawGenerator:
 
         numpy.random.seed(512)
         self.splitDataCounter = 0
-   
+
         self.x = numpy.empty ((0, self.inputFeatDim), dtype=numpy.float32)
         self.y = numpy.empty (0, dtype=numpy.int32)
         self.batchPointer = 0
@@ -109,12 +109,12 @@ class rawGenerator:
                 if self.splitDataCounter == self.numSplit:
                     self.splitDataCounter = 0
                     self.doUpdateSplit = False
-            
+
             xMini = self.x[self.batchPointer:self.batchPointer+self.batchSize]
             yMini = self.y[self.batchPointer:self.batchPointer+self.batchSize]
             self.batchPointer += self.batchSize
             return (xMini, yMini)
-       
+
         else: ## Test mode
             while True:
                 if self.doUpdateSplit:
@@ -131,4 +131,3 @@ class rawGenerator:
                     if self.splitDataCounter == self.numSplit:
                         self.splitDataCounter = 0
                         raise StopIteration
-
