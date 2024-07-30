@@ -1,0 +1,9 @@
+name: rsclf
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+    - keras==3.4.1
+    - scipy
+    - --extra-index-url https://pypi.nvidia.com
+    - tensorflow[and-cuda]==2.16.2
