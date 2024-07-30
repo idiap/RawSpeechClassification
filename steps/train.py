@@ -20,14 +20,19 @@
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 
+import inspect
+import os
+import sys
+
 import keras
 import keras.backend as K
-from keras.optimizers import SGD
-from rawGenerator import rawGenerator
-from model_architecture import model_architecture
 import numpy
-import sys
-import os
+
+from keras.optimizers import SGD
+
+from model_architecture import model_architecture
+from rawGenerator import rawGenerator
+
 
 if __name__ != '__main__':
     raise ImportError ('This script can only be run, and can\'t be imported')
@@ -59,8 +64,12 @@ cvGen = rawGenerator (cv_dir, learning['batchSize'])
 trGen = rawGenerator (tr_dir, learning['batchSize'])
 
 ## Initialise learning parameters and models
-# s = SGD(lr=learning['rate'], decay=0, momentum=0.5, nesterov=False)
-s = SGD(learning_rate=learning['rate'], weight_decay=0, momentum=0.5, nesterov=False)
+sgd_args = inspect.getfullargspec(SGD)
+
+if "learning_rate" in sgd_args.args:
+    s = SGD(learning_rate=learning['rate'], weight_decay=0, momentum=0.5, nesterov=False)
+else:
+    s = SGD(lr=learning['rate'], decay=0, momentum=0.5, nesterov=False)
 
 ## Initialise model
 numpy.random.seed(512)
