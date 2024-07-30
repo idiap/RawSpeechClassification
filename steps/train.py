@@ -80,7 +80,7 @@ loss = 'binary_crossentropy' if trGen.outputFeatDim==1 else 'sparse_categorical_
 m.compile(loss=loss, optimizer=s, metrics=['accuracy'])
 print ('Learning rate: %f' % learning['rate'])
 h = [
-    m.fit(
+    m.fit_generator(
         trGen,
         steps_per_epoch=trGen.numSteps,
         validation_data=cvGen,
@@ -100,7 +100,7 @@ valErrorDiff = 1 + learning['minValError'] ## Initialise
 while learning['lrScaleCount']:
     print ('Learning rate: %f' % learning['rate'])
     h.append(
-        m.fit(
+        m.fit_generator(
             trGen,
             steps_per_epoch=trGen.numSteps,
             validation_data=cvGen,
