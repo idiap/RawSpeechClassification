@@ -9,3 +9,4 @@ dependencies:
       - keras==2.2.2
       - tensorflow-gpu==1.10.0
       - h5py==2.9.0
+      - packaging
