@@ -81,7 +81,7 @@ h = [
         callbacks=[logger],
     )
 ]
-m.save (exp + '/cnn.h5', overwrite=True)
+m.save (exp + '/cnn.keras', overwrite=True)
 sys.stdout.flush()
 sys.stderr.flush()
 
@@ -101,7 +101,7 @@ while learning['lrScaleCount']:
             callbacks=[logger],
         )
     )
-    m.save(exp + '/cnn.h5', overwrite=True)
+    m.save(exp + '/cnn.keras', overwrite=True)
     sys.stdout.flush()
     sys.stderr.flush()
 

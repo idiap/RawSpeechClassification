@@ -68,11 +68,11 @@ test_feat=${OUTPUT}/test_feat
 [ -d $test_feat ] || ./steps/wav2feat.py $test_list $test_feat "test"
 
 # Train
-[ -f $exp/cnn.h5 ] || ./steps/train.py $train_feat $cv_feat $exp $arch
-[ ! -f $exp/cnn.h5 ] && echo "Training failed. Check logs." && exit 1
+[ -f $exp/cnn.keras ] || ./steps/train.py $train_feat $cv_feat $exp $arch
+[ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || ./steps/test.py $test_feat $exp/cnn.h5 > $exp/scores.txt
+[ -s $exp/scores.txt ] || ./steps/test.py $test_feat $exp/cnn.keras > $exp/scores.txt
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
 
 echo "Script took $(date -u -d @${SECONDS} +"%T")"
