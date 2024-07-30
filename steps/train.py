@@ -29,6 +29,7 @@ import keras.backend as K
 import numpy
 
 from keras.optimizers import SGD
+from packaging.version import Version
 
 from model_architecture import model_architecture
 from rawGenerator import rawGenerator
@@ -89,6 +90,17 @@ h = [
         verbose=2,
         callbacks=[logger],
     )
+    if Version(keras.__version__) < Version("2.5.0")
+    else
+    m.fit(
+        trGen,
+        steps_per_epoch=trGen.numSteps,
+        validation_data=cvGen,
+        validation_steps=cvGen.numSteps,
+        epochs=learning['minEpoch']-1,
+        verbose=2,
+        callbacks=[logger],
+    )
 ]
 m.save (exp + '/cnn.keras', overwrite=True)
 sys.stdout.flush()
@@ -109,6 +121,19 @@ while learning['lrScaleCount']:
             verbose=2,
             callbacks=[logger],
         )
+        if Version(keras.__version__) < Version("2.5.0")
+        else
+        m.fit(
+            trGen,
+            steps_per_epoch=trGen.numSteps,
+            validation_data=cvGen,
+            validation_steps=cvGen.numSteps,
+            epochs=1,
+            verbose=2,
+            callbacks=[logger],
+        )
+
+
     )
     m.save(exp + '/cnn.keras', overwrite=True)
     sys.stdout.flush()
