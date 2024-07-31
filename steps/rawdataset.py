@@ -89,7 +89,6 @@ class RawDataset(keras.utils.PyDataset):
 
     ## Retrieve a mini batch
     def __getitem__(self, idx):
-        # print(f"getitem {idx} numDone {self.numDone} numSteps {self.numSteps} numFeats {self.numFeats} batch {self.batchSize}")
         self.numDone += 1
         if self.mode == "train":
             while self.batchPointer + self.batchSize >= len(self.x):
@@ -99,7 +98,6 @@ class RawDataset(keras.utils.PyDataset):
 
                 self.splitDataCounter += 1
 
-                # print(f"Loading {self.featDir} {self.splitDataCounter}")
                 featFile = "{:s}/{:d}.x.h5".format(self.featDir, self.splitDataCounter)
                 labelFile = "{:s}/{:d}.y.h5".format(self.featDir, self.splitDataCounter)
 
@@ -114,7 +112,7 @@ class RawDataset(keras.utils.PyDataset):
                 self.x = np.concatenate((self.x[self.batchPointer :], x))
                 self.y = np.concatenate((self.y[self.batchPointer :], y))
                 self.batchPointer = 0
-                # print(f"x {self.x.shape} y {self.y.shape}")
+
                 ## Shuffle data
                 randomInd = np.array(range(len(self.x)))
                 np.random.shuffle(randomInd)
@@ -141,7 +139,7 @@ class RawDataset(keras.utils.PyDataset):
                     self.doUpdateSplit = False
                 try:
                     utt, feat, lab = pickle.load(self.f)
-                    return (utt, self.addContextNorm(feat), lab)
+                    return utt, self.addContextNorm(feat), lab
                 except EOFError:
                     self.f.close()
                     self.doUpdateSplit = True
