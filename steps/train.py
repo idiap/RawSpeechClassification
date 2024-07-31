@@ -26,7 +26,7 @@ import sys
 
 import keras
 import keras.backend as K
-import numpy
+import numpy as np
 
 from keras.optimizers import SGD
 from packaging.version import Version
@@ -64,9 +64,7 @@ learning = {
 
 ## Number of times the learning rate has to be scaled.
 learning["lrScaleCount"] = int(
-    numpy.ceil(
-        numpy.log(learning["minLr"] / learning["rate"]) / numpy.log(learning["lrScale"])
-    )
+    np.ceil(np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"]))
 )
 
 os.makedirs(exp, exist_ok=True)
@@ -86,7 +84,7 @@ else:
     s = SGD(lr=learning["rate"], decay=0, momentum=0.5, nesterov=False)
 
 ## Initialise model
-numpy.random.seed(512)
+np.random.seed(512)
 m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 
 ## Initial training for "minEpoch-1" epochs
