@@ -32,8 +32,11 @@ from keras.optimizers import SGD
 from packaging.version import Version
 
 from model_architecture import model_architecture
-from rawGenerator import rawGenerator
 
+if Version(keras.__version__) < Version("3"):
+    from rawGenerator import rawGenerator
+else:
+    from rawdataset import RawDataset as rawGenerator
 
 if __name__ != '__main__':
     raise ImportError ('This script can only be run, and can\'t be imported')
@@ -80,8 +83,9 @@ m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 loss = 'binary_crossentropy' if trGen.outputFeatDim==1 else 'sparse_categorical_crossentropy'
 m.compile(loss=loss, optimizer=s, metrics=['accuracy'])
 print ('Learning rate: %f' % learning['rate'])
-h = [
-    m.fit_generator(
+
+if Version(keras.__version__) < Version("2.5.0"):
+    output = m.fit_generator(
         trGen,
         steps_per_epoch=trGen.numSteps,
         validation_data=cvGen,
@@ -90,9 +94,8 @@ h = [
         verbose=2,
         callbacks=[logger],
     )
-    if Version(keras.__version__) < Version("2.5.0")
-    else
-    m.fit(
+elif Version(keras.__version__) < Version("3"):
+    output = m.fit(
         trGen,
         steps_per_epoch=trGen.numSteps,
         validation_data=cvGen,
@@ -101,7 +104,18 @@ h = [
         verbose=2,
         callbacks=[logger],
     )
-]
+else:
+    output = m.fit(
+        trGen,
+        validation_data=cvGen,
+        epochs=learning['minEpoch']-1,
+        verbose=2,
+        shuffle=False,
+        callbacks=[logger],
+    )
+
+h = [ output ]
+
 m.save (exp + '/cnn.keras', overwrite=True)
 sys.stdout.flush()
 sys.stderr.flush()
@@ -111,8 +125,8 @@ valErrorDiff = 1 + learning['minValError'] ## Initialise
 ## Continue training till validation loss stagnates
 while learning['lrScaleCount']:
     print ('Learning rate: %f' % learning['rate'])
-    h.append(
-        m.fit_generator(
+    if Version(keras.__version__) < Version("2.5.0"):
+        output = m.fit_generator(
             trGen,
             steps_per_epoch=trGen.numSteps,
             validation_data=cvGen,
@@ -121,9 +135,8 @@ while learning['lrScaleCount']:
             verbose=2,
             callbacks=[logger],
         )
-        if Version(keras.__version__) < Version("2.5.0")
-        else
-        m.fit(
+    elif Version(keras.__version__) < Version("3"):
+        output = m.fit(
             trGen,
             steps_per_epoch=trGen.numSteps,
             validation_data=cvGen,
@@ -132,9 +145,17 @@ while learning['lrScaleCount']:
             verbose=2,
             callbacks=[logger],
         )
+    else:
+        output = m.fit(
+            trGen,
+            validation_data=cvGen,
+            epochs=1,
+            verbose=2,
+            shuffle=False,
+            callbacks=[logger],
+        )
+    h.append(output)
 
-
-    )
     m.save(exp + '/cnn.keras', overwrite=True)
     sys.stdout.flush()
     sys.stderr.flush()
@@ -144,4 +165,7 @@ while learning['lrScaleCount']:
     if valErrorDiff < learning['minValError']:
         learning['rate'] *= learning['lrScale']
         learning['lrScaleCount'] -= 1
-        K.set_value(m.optimizer.lr, learning['rate'])
+        if Version(keras.__version__) < Version("3"):
+            K.set_value(m.optimizer.lr, learning['rate'])
+        else:
+            m.optimizer.learning_rate = learning['rate']
