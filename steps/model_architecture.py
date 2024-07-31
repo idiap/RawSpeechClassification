@@ -1,8 +1,9 @@
-#!/usr/bin/python3
+# coding=utf-8
 
-## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
+## Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
 ## This file is part of RawSpeechClassification.
 ##
@@ -24,7 +25,8 @@ import keras
 def model_architecture (arch, inputFeatDim=4000, outputFeatDim=1):
     if arch == 'subseg':
         m = keras.models.Sequential([
-                keras.layers.Reshape ((inputFeatDim, 1), input_shape=(inputFeatDim,)),
+                keras.layers.Input((inputFeatDim,)),
+                keras.layers.Reshape ((inputFeatDim, 1)),
                 keras.layers.Conv1D(filters=128, kernel_size=30, strides=10),
                 keras.layers.Activation('relu'),
                 keras.layers.MaxPooling1D(2),
@@ -42,7 +44,8 @@ def model_architecture (arch, inputFeatDim=4000, outputFeatDim=1):
 
     elif arch == 'seg':
         m = keras.models.Sequential([
-                keras.layers.Reshape ((inputFeatDim, 1), input_shape=(inputFeatDim,)),
+                keras.layers.Input((inputFeatDim,)),
+                keras.layers.Reshape ((inputFeatDim, 1)),
                 keras.layers.Conv1D(filters=128, kernel_size=300, strides=100),
                 keras.layers.Activation('relu'),
                 keras.layers.MaxPooling1D(2),
