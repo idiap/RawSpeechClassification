@@ -38,51 +38,65 @@ if Version(keras.__version__) < Version("3"):
 else:
     from rawdataset import RawDataset as rawGenerator
 
-if __name__ != '__main__':
-    raise ImportError ('This script can only be run, and can\'t be imported')
+
+if __name__ != "__main__":
+    raise ImportError("This script can only be run, and can't be imported")
 
 if len(sys.argv) != 5:
-    raise TypeError ('USAGE: train.py tr_dir cv_dir dnn_dir arch')
+    raise TypeError("USAGE: train.py tr_dir cv_dir dnn_dir arch")
 
-tr_dir  = sys.argv[1]
-cv_dir  = sys.argv[2]
-exp     = sys.argv[3]
-arch    = sys.argv[4]
+tr_dir = sys.argv[1]
+cv_dir = sys.argv[2]
+exp = sys.argv[3]
+arch = sys.argv[4]
 
 ## Learning parameters
-learning = {'rate'        : 0.1,    ## Initial learning rate
-            'minEpoch'    : 5,      ## Minimum epochs to run before reducing learning rate
-            'lrScale'     : 0.5,    ## Scale factor to learning rate
-            'batchSize'   : 256,    ## Batch size
-            'minValError' : 0.002,  ## Threshold on validation loss reduction between
-                                    ## successive epochs, below which learning rate is scaled.
-            'minLr'       : 1e-7}   ## The final learning rate below which the training stops.
-## Number of times the learning rate has to be scaled.
-learning['lrScaleCount'] = int(numpy.ceil(numpy.log(learning['minLr']/learning['rate']) / \
-                            numpy.log(learning['lrScale'])))
+learning = {
+    "rate": 0.1,  ## Initial learning rate
+    "minEpoch": 5,  ## Minimum epochs to run before reducing learning rate
+    "lrScale": 0.5,  ## Scale factor to learning rate
+    "batchSize": 256,  ## Batch size
+    ## Threshold on validation loss reduction between
+    ## successive epochs, below which learning rate is scaled.
+    "minValError": 0.002,
+    "minLr": 1e-7,
+}  ## The final learning rate below which the training stops.
 
-os.makedirs (exp, exist_ok=True)
+## Number of times the learning rate has to be scaled.
+learning["lrScaleCount"] = int(
+    numpy.ceil(
+        numpy.log(learning["minLr"] / learning["rate"]) / numpy.log(learning["lrScale"])
+    )
+)
+
+os.makedirs(exp, exist_ok=True)
 logger = keras.callbacks.CSVLogger(exp + "/log.dat", separator=" ", append=True)
 
-cvGen = rawGenerator (cv_dir, learning['batchSize'])
-trGen = rawGenerator (tr_dir, learning['batchSize'])
+cvGen = rawGenerator(cv_dir, learning["batchSize"])
+trGen = rawGenerator(tr_dir, learning["batchSize"])
 
 ## Initialise learning parameters and models
 sgd_args = inspect.getfullargspec(SGD)
 
 if "learning_rate" in sgd_args.args:
-    s = SGD(learning_rate=learning['rate'], weight_decay=0, momentum=0.5, nesterov=False)
+    s = SGD(
+        learning_rate=learning["rate"], weight_decay=0, momentum=0.5, nesterov=False
+    )
 else:
-    s = SGD(lr=learning['rate'], decay=0, momentum=0.5, nesterov=False)
+    s = SGD(lr=learning["rate"], decay=0, momentum=0.5, nesterov=False)
 
 ## Initialise model
 numpy.random.seed(512)
 m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 
 ## Initial training for "minEpoch-1" epochs
-loss = 'binary_crossentropy' if trGen.outputFeatDim==1 else 'sparse_categorical_crossentropy'
-m.compile(loss=loss, optimizer=s, metrics=['accuracy'])
-print ('Learning rate: %f' % learning['rate'])
+loss = (
+    "binary_crossentropy"
+    if trGen.outputFeatDim == 1
+    else "sparse_categorical_crossentropy"
+)
+m.compile(loss=loss, optimizer=s, metrics=["accuracy"])
+print("Learning rate: %f" % learning["rate"])
 
 if Version(keras.__version__) < Version("2.5.0"):
     output = m.fit_generator(
@@ -90,7 +104,7 @@ if Version(keras.__version__) < Version("2.5.0"):
         steps_per_epoch=trGen.numSteps,
         validation_data=cvGen,
         validation_steps=cvGen.numSteps,
-        epochs=learning['minEpoch']-1,
+        epochs=learning["minEpoch"] - 1,
         verbose=2,
         callbacks=[logger],
     )
@@ -100,7 +114,7 @@ elif Version(keras.__version__) < Version("3"):
         steps_per_epoch=trGen.numSteps,
         validation_data=cvGen,
         validation_steps=cvGen.numSteps,
-        epochs=learning['minEpoch']-1,
+        epochs=learning["minEpoch"] - 1,
         verbose=2,
         callbacks=[logger],
     )
@@ -108,23 +122,23 @@ else:
     output = m.fit(
         trGen,
         validation_data=cvGen,
-        epochs=learning['minEpoch']-1,
+        epochs=learning["minEpoch"] - 1,
         verbose=2,
         shuffle=False,
         callbacks=[logger],
     )
 
-h = [ output ]
+h = [output]
 
-m.save (exp + '/cnn.keras', overwrite=True)
+m.save(exp + "/cnn.keras", overwrite=True)
 sys.stdout.flush()
 sys.stderr.flush()
 
-valErrorDiff = 1 + learning['minValError'] ## Initialise
+valErrorDiff = 1 + learning["minValError"]  ## Initialise
 
 ## Continue training till validation loss stagnates
-while learning['lrScaleCount']:
-    print ('Learning rate: %f' % learning['rate'])
+while learning["lrScaleCount"]:
+    print("Learning rate: %f" % learning["rate"])
     if Version(keras.__version__) < Version("2.5.0"):
         output = m.fit_generator(
             trGen,
@@ -156,16 +170,16 @@ while learning['lrScaleCount']:
         )
     h.append(output)
 
-    m.save(exp + '/cnn.keras', overwrite=True)
+    m.save(exp + "/cnn.keras", overwrite=True)
     sys.stdout.flush()
     sys.stderr.flush()
 
     ## Check validation error and reduce learning rate if required
-    valErrorDiff = h[-2].history['val_loss'][-1] - h[-1].history['val_loss'][-1]
-    if valErrorDiff < learning['minValError']:
-        learning['rate'] *= learning['lrScale']
-        learning['lrScaleCount'] -= 1
+    valErrorDiff = h[-2].history["val_loss"][-1] - h[-1].history["val_loss"][-1]
+    if valErrorDiff < learning["minValError"]:
+        learning["rate"] *= learning["lrScale"]
+        learning["lrScaleCount"] -= 1
         if Version(keras.__version__) < Version("3"):
-            K.set_value(m.optimizer.lr, learning['rate'])
+            K.set_value(m.optimizer.lr, learning["rate"])
         else:
-            m.optimizer.learning_rate = learning['rate']
+            m.optimizer.learning_rate = learning["rate"]
