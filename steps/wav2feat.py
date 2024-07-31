@@ -99,7 +99,7 @@ class wav2feat:
 
     ## Check files in list and return attributes
     def checkList(self, wavLabListFile):
-        print("Checking files in {:s}".format(wavLabListFile))
+        print(f"Checking files in {wavLabListFile}")
         labels = set()
         numFeats = 0
         numUtterances = 0
@@ -108,17 +108,16 @@ class wav2feat:
 
             with wave.open(w) as f:
                 ## Check number of channels and sampling rate
-                assert (
-                    f.getnchannels() == 1
-                ), "ERROR: {:s} has multiple channels. Modify the code accordingly and re-run".format(
-                    w
+                msg = (
+                    f"ERROR: {w} has multiple channels. "
+                    f"Modify the code accordingly and re-run"
                 )
-                assert f.getframerate() == self.param["fs"], (
-                    "ERROR: Sampling frequency mismatch with {:s}: "
-                    "expected {:f}, got {:f}".format(
-                        w, self.param["fs"], f.getframerate()
-                    )
+                assert f.getnchannels() == 1, msg
+                msg = (
+                    f"ERROR: Sampling frequency mismatch with {w}: "
+                    f"expected {self.param['fs']}, got {f.getframerate()}"
                 )
+                assert f.getframerate() == self.param["fs"], msg
                 N = f.getnframes()
 
             numFeats += max(
@@ -149,12 +148,11 @@ class wav2feat:
             "outputFeatDim": self.outputFeatDim,
         }
         print(self.info)
-        infoFile = "{:s}/info.npy".format(self.featDir)
+        infoFile = f"{self.featDir}/info.npy"
         numpy.save(infoFile, self.info)
 
-        self.wll.seek(
-            0
-        )  ## In case the object is used as iterator before calling this routine
+        ## In case the object is used as iterator before calling this routine
+        self.wll.seek(0)
         for self.splitDataCounter in range(1, self.numSplit + 1):
             self.saveNextSplitData()
         self.wll.seek(0)  ## For future use
@@ -174,8 +172,8 @@ class wav2feat:
 
         if self.mode == "train":
             uttList, featList, labelList = map(list, zip(*featLabList))
-            featFile = "{:s}/{:d}.x.h5".format(self.featDir, self.splitDataCounter)
-            labelFile = "{:s}/{:d}.y.h5".format(self.featDir, self.splitDataCounter)
+            featFile = f"{self.featDir}/{self.splitDataCounter}.x.h5"
+            labelFile = f"{self.featDir}/{self.splitDataCounter}.y.h5"
 
             ## Save features
             with h5py.File(featFile, "w") as f:
@@ -188,7 +186,7 @@ class wav2feat:
                     f.create_dataset(str(i), data=labels, dtype="int32")
 
         else:
-            featFile = "{:s}/{:d}.pickle".format(self.featDir, self.splitDataCounter)
+            featFile = f"{self.featDir}/{self.splitDataCounter}.pickle"
             with open(featFile, "wb") as f:
                 for ufl in featLabList:
                     pickle.dump(ufl, f)
