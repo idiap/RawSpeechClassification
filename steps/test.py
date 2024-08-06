@@ -22,21 +22,31 @@
 
 import sys
 
+from pathlib import Path
+
 import keras
-import numpy
+import numpy as np
 
-from rawGenerator import rawGenerator
+from packaging.version import Version
+
+if Version(keras.__version__) < Version("3"):
+    from rawGenerator import rawGenerator
+else:
+    from rawdataset import RawDataset as rawGenerator
 
 
-def test(test_dir, model):
+def test(test_dir, model, output_dir):
+    Path(output_dir).mkdir(exist_ok=True, parents=True)
+
     r = rawGenerator(test_dir, mode="test")
     m = keras.models.load_model(model)
 
     spk_scores = {}
     spk_labels = {}
     spk_counts = {}
+    i = 0
     for w, feat, l in r:
-        pred = m.predict(feat)
+        pred = m.predict(feat, verbose=0)
 
         ## Get the speaker ID. This is useful when each speaker has multiple utterances and
         ## the results need to be calculated per speaker instead of per utterance. You need
@@ -49,21 +59,34 @@ def test(test_dir, model):
         spk = w
 
         if spk not in spk_scores:
-            spk_scores[spk] = numpy.sum(pred, axis=0)
+            spk_scores[spk] = np.sum(pred, axis=0)
             spk_counts[spk] = len(pred)
             ## NOTE: Assuming the utterance labels are same across each speaker.
             ## Takes the label of the speaker's first utterance encountered.
             spk_labels[spk] = l[0]
         else:
-            spk_scores[spk] += numpy.sum(pred, axis=0)
+            spk_scores[spk] += np.sum(pred, axis=0)
             spk_counts[spk] += len(pred)
 
-    for spk in spk_labels:
-        print(spk, spk_labels[spk], spk_scores[spk] / spk_counts[spk])
+    nb_correct = 0
+    with open(Path(output_dir) / "scores.txt", "w") as f:
+        for spk in spk_labels:
+            label = spk_labels[spk]
+            posterior = spk_scores[spk] / spk_counts[spk]
+            prediction = np.argmax(posterior)
+            print(spk, label, posterior, file=f)
+            if prediction == label:
+                nb_correct += 1
+
+    accuracy = nb_correct / len(spk_labels)
+    with open(Path(output_dir) / "accuracy.dat", "w") as f:
+        print("accuracy", file=f)
+        print(accuracy, file=f)
 
 
 if __name__ == "__main__":
     test_dir = sys.argv[1]
     model = sys.argv[2]
+    output_dir = sys.argv[3]
 
-    test(test_dir, model)
+    test(test_dir, model, output_dir)
