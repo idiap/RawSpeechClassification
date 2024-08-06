@@ -2,16 +2,7 @@
 
 # bash ${0} -C ~/miniconda3 -n rsclf
 
-#SBATCH --time 08:00:00
-#SBATCH --job-name raw-sp-clf
-#SBATCH --mem 20G
-#SBATCH --cpus-per-task 4
-#SBATCH --partition gpu
-#SBATCH --gpus 1
-#SBATCH --constraint "p40|v100"
-
 echo "Start to run on $(hostname) at $(date +'%F %T')"
-
 SECONDS=0
 
 CONDA_HOME=
@@ -48,6 +39,19 @@ eval "$(${CONDA_HOME}/bin/conda shell.bash hook)"
 conda activate ${CONDA_ENV}
 export PYTHONPATH=$PWD/steps:$PYTHONPATH
 
+if [[ `conda list | grep torch` ]] ; then
+  echo "Using torch backend"
+  export KERAS_BACKEND=torch
+elif [[ `conda list | grep tensorflow` ]] ; then
+  echo "Using tensorflow backend"
+  export KERAS_BACKEND=tensorflow
+fi
+
+mkdir -p ${OUTPUT}
+
+conda env export > ${OUTPUT}/env.yaml
+conda list > ${OUTPUT}/env.txt
+
 echo "Using architecture '${arch}'"
 
 exp=${OUTPUT}/cnn_${arch}_${iter} # Output directory
@@ -63,16 +67,16 @@ cv_feat=${OUTPUT}/cv_feat
 test_feat=${OUTPUT}/test_feat
 
 # Extract features
-[ -d $cv_feat ] || ./steps/wav2feat.py $cv_list $cv_feat "train"
-[ -d $train_feat ] || ./steps/wav2feat.py $train_list $train_feat "train"
-[ -d $test_feat ] || ./steps/wav2feat.py $test_list $test_feat "test"
+[ -d $cv_feat ] || python3 steps/wav2feat.py $cv_list $cv_feat "train"
+[ -d $train_feat ] || python3 steps/wav2feat.py $train_list $train_feat "train"
+[ -d $test_feat ] || python3 steps/wav2feat.py $test_list $test_feat "test"
 
 # Train
-[ -f $exp/cnn.keras ] || ./steps/train.py $train_feat $cv_feat $exp $arch
+[ -f $exp/cnn.keras ] || python3 steps/train.py $train_feat $cv_feat $exp $arch
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || ./steps/test.py $test_feat $exp/cnn.keras > $exp/scores.txt
+[ -s $exp/scores.txt ] || python3 steps/test.py $test_feat $exp/cnn.keras $exp
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
 
 echo "Script took $(date -u -d @${SECONDS} +"%T")"
