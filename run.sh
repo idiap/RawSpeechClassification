@@ -42,14 +42,14 @@ cv_feat=feat/cv_feat
 test_feat=feat/test_feat
 
 # Extract features
-[ -d $cv_feat ] || ./steps/wav2feat.py $cv_list $cv_feat "train"
-[ -d $train_feat ] || ./steps/wav2feat.py $train_list $train_feat "train"
-[ -d $test_feat ] || ./steps/wav2feat.py $test_list $test_feat "test"
+[ -d $cv_feat ] || ./rsclf/wav2feat.py $cv_list $cv_feat "train"
+[ -d $train_feat ] || ./rsclf/wav2feat.py $train_list $train_feat "train"
+[ -d $test_feat ] || ./rsclf/wav2feat.py $test_list $test_feat "test"
 
 # Train
-[ -f $exp/cnn.keras ] || ./steps/train.py $train_feat $cv_feat $exp $arch
+[ -f $exp/cnn.keras ] || ./rsclf/train.py $train_feat $cv_feat $exp $arch
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || ./steps/test.py $test_feat $exp/cnn.keras > $exp/scores.txt
+[ -s $exp/scores.txt ] || ./rsclf/test.py $test_feat $exp/cnn.keras > $exp/scores.txt
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
