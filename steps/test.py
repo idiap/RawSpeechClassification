@@ -28,19 +28,13 @@ from pathlib import Path
 import keras
 import numpy as np
 
-from packaging.version import Version
-
-if Version(keras.__version__) < Version("3"):
-    from rawGenerator import rawGenerator
-else:
-    from rawdataset import RawDataset as rawGenerator
-
+from rawdataset import RawDataset
 
 
 def test(test_dir, model, output_dir, verbose=0):
     Path(output_dir).mkdir(exist_ok=True, parents=True)
 
-    r = rawGenerator(test_dir, mode="test")
+    r = RawDataset(test_dir, mode="test")
     m = keras.models.load_model(model)
 
     spk_scores, spk_labels, spk_counts = {}, {}, {}
