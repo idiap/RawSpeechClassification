@@ -33,29 +33,32 @@ conda env create -f conda/rsclf-tensorflow.yaml
     </path2/file2.wav> 0
    ```
 
-1. Configure and run run.sh. Provide model architecture
-   as an argument. See `model_architecture.py` for valid
-   options. Optionally, provide an integer as a count of the number of
-   times the experiment is repeated. This is useful when the same
-   experiment needs to be repeated multiple times with different
+1. Configure and run run.sh. Provide model architecture as an
+   argument. See [`model_architecture.py`](rsclf/model_architecture.py)
+   for valid options. Optionally, provide an integer as a count of the
+   number of times the experiment is repeated. This is useful when the
+   same experiment needs to be repeated multiple times with different
    initialisations. The argument defaults to 1.
 
 ## Code Components
 
-1. `wav2feat.py` creates directories where the wav files are stored as
-   fixed length frames for faster access during training and testing.
+1. [`wav2feat.py`](rsclf/wav2feat.py) creates directories where the
+   wav files are stored as fixed length frames for faster access
+   during training and testing.
 
-1. `train.py` is the Keras training script.
+1. [`train.py`](rsclf/train.py) is the Keras training script.
 
-1. Model architecture can be configured in `model_architecture.py`.
+1. Model architecture can be configured in
+   [`model_architecture.py`](rsclf/model_architecture.py).
 
-1. `rawdataset` provides an object that reads the saved directories
-   in batches and retrieves mini-batches for training.
+1. [`rawdataset.py`](rsclf/rawdataset.py) provides an object that
+   reads the saved directories in batches and retrieves mini-batches
+   for training.
 
-1. `test.py` performs the testing and generates scores as posterior
-   probabilities. If you need the results per speaker,
-   configure it accordingly (see the script for details). The default
-   output format is:
+1. [`test.py`](rsclf/test.py) performs the testing and generates
+   scores as posterior probabilities. If you need the results per
+   speaker, configure it accordingly (see the script for details). The
+   default output format is:
 
    ```
     <speakerID> <label> [<posterior_probability_vector>]
