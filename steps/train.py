@@ -4,6 +4,8 @@
 ## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+## and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
+## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
 ## This file is part of RawSpeechClassification.
 ##
