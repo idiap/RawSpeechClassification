@@ -66,17 +66,19 @@ train_feat=${OUTPUT}/train_feat
 cv_feat=${OUTPUT}/cv_feat
 test_feat=${OUTPUT}/test_feat
 
+spliceSize=25
+
 # Extract features
-[ -d $cv_feat ] || python3 steps/wav2feat.py $cv_list $cv_feat "train"
-[ -d $train_feat ] || python3 steps/wav2feat.py $train_list $train_feat "train"
-[ -d $test_feat ] || python3 steps/wav2feat.py $test_list $test_feat "test"
+[ -d $cv_feat ] || python3 steps/wav2feat.py --wav-list-file $cv_list --feature-dir $cv_feat --mode "train"
+[ -d $train_feat ] || python3 steps/wav2feat.py --wav-list-file $train_list --feature-dir $train_feat --mode "train"
+[ -d $test_feat ] || python3 steps/wav2feat.py --wav-list-file $test_list --feature-dir $test_feat --mode "test"
 
 # Train
-[ -f $exp/cnn.keras ] || python3 steps/train.py --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --verbose 2
+[ -f $exp/cnn.keras ] || python3 steps/train.py --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --splice-size $spliceSize --verbose 2
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || python3 steps/test.py --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --verbose 0
+[ -s $exp/scores.txt ] || python3 steps/test.py --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --splice-size $spliceSize --verbose 0
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
 
 echo "Script took $(date -u -d @${SECONDS} +"%T")"
