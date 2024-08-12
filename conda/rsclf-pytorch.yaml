@@ -7,8 +7,8 @@ dependencies:
   - pytorch::pytorch-cuda=12.1
   - nvidia::cuda=12.1
   - numpy
-  - h5py
-  - scipy
   - pip
   - pip:
-      - keras
+      - keras==3.4.1
+      - h5py
+      - scipy
