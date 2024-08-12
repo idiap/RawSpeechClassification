@@ -72,7 +72,7 @@ test_feat=${OUTPUT}/test_feat
 [ -d $test_feat ] || python3 steps/wav2feat.py $test_list $test_feat "test"
 
 # Train
-[ -f $exp/cnn.keras ] || python3 steps/train.py --feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch
+[ -f $exp/cnn.keras ] || python3 steps/train.py --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --verbose 2
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
