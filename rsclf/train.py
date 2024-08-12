@@ -23,7 +23,6 @@
 
 import argparse
 import inspect
-import sys
 
 from pathlib import Path
 
@@ -93,7 +92,7 @@ def train(args):
         else "sparse_categorical_crossentropy"
     )
     m.compile(loss=loss, optimizer=s, metrics=["accuracy"])
-    print("Learning rate: %f" % learning["rate"])
+    print(f"Learning rate: {learning['rate']:g}")
 
     output = m.fit(
         trGen,
@@ -107,14 +106,12 @@ def train(args):
     h = [output]
 
     m.save(model_filename, overwrite=True)
-    sys.stdout.flush()
-    sys.stderr.flush()
 
     valErrorDiff = 1 + learning["minValError"]  # Initialise
 
     # Continue training till validation loss stagnates
     while learning["lrScaleCount"]:
-        print("Learning rate: %f" % learning["rate"])
+        print("Learning rate: {learning['rate']:g}")
         output = m.fit(
             trGen,
             validation_data=cvGen,
@@ -126,8 +123,6 @@ def train(args):
         h.append(output)
 
         m.save(model_filename, overwrite=True)
-        sys.stdout.flush()
-        sys.stderr.flush()
 
         # Check validation error and reduce learning rate if required
         valErrorDiff = h[-2].history["val_loss"][-1] - h[-1].history["val_loss"][-1]
