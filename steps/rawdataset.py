@@ -101,8 +101,8 @@ class RawDataset(keras.utils.PyDataset):
 
                 self.splitDataCounter += 1
 
-                featFile = "{:s}/{:d}.x.h5".format(self.featDir, self.splitDataCounter)
-                labelFile = "{:s}/{:d}.y.h5".format(self.featDir, self.splitDataCounter)
+                featFile = f"{self.featDir}/{self.splitDataCounter}.x.h5"
+                labelFile = "{self.featDir}/{self.splitDataCounter}.y.h5"
 
                 with h5py.File(featFile, "r") as f:
                     featList = [self.addContextNorm(f[i][()]) for i in f]
@@ -135,9 +135,7 @@ class RawDataset(keras.utils.PyDataset):
             while True:
                 if self.doUpdateSplit:
                     self.splitDataCounter += 1
-                    uflFile = "{:s}/{:d}.pickle".format(
-                        self.featDir, self.splitDataCounter
-                    )
+                    uflFile = "{self.featDir}/{self.splitDataCounter}.pickle")
                     self.f = open(uflFile, "rb")
                     self.doUpdateSplit = False
                 try:
