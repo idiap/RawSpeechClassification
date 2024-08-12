@@ -31,10 +31,10 @@ import numpy as np
 from rawdataset import RawDataset
 
 
-def test(test_dir, model, output_dir, verbose=0):
+def test(test_dir, model, output_dir, splice_size=25, verbose=0):
     Path(output_dir).mkdir(exist_ok=True, parents=True)
 
-    r = RawDataset(test_dir, mode="test")
+    r = RawDataset(test_dir, splice_size=splice_size, mode="test")
     m = keras.models.load_model(model)
 
     spk_scores, spk_labels, spk_counts = {}, {}, {}
@@ -93,13 +93,17 @@ def main():
         help="Output directory"
     )
     parser.add_argument(
+        "--splice-size", type=int, default=25,
+        help="Slice size for feature context"
+    )
+    parser.add_argument(
         "--verbose", type=int, default=0,
         help="Keras verbose level for fit and predict"
     )
     # fmt: on
     args = parser.parse_args()
 
-    test(args.feature_dir, args.model_filename, args.output_dir, args.verbose)
+    test(args.feature_dir, args.model_filename, args.output_dir, args.splice_size, args.verbose)
 
 
 if __name__ == "__main__":
