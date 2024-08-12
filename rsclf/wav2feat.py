@@ -31,7 +31,9 @@ import wave
 
 
 class WAV2featExtractor:
+
     def __init__(self, wavLabListFile, featDir=None, param=None, mode="train"):
+
         self.wavLabListFile = wavLabListFile
         self.featDir = featDir
         self.mode = mode
@@ -61,12 +63,12 @@ class WAV2featExtractor:
         self.inputFeatDim = self.param["windowLengthSamples"]
         self.outputFeatDim = 1 if self.numLabels == 2 else self.numLabels
 
-    # Exit
     def __exit__(self):
         self.wll.close()
 
-    # Feature extraction routine
     def extract(self, wavepath):
+        """Feature extraction routine"""
+
         # Read data and labels
         fs, data = wav.read(wavepath)
 
@@ -98,8 +100,9 @@ class WAV2featExtractor:
 
         return feat
 
-    # Check files in list and return attributes
     def checkList(self, wavLabListFile):
+        """Check files in list and return attributes"""
+
         print(f"Checking files in {wavLabListFile}")
         labels = set()
         numFeats = 0
@@ -133,8 +136,9 @@ class WAV2featExtractor:
         self.wll.seek(0)
         return numFeats, numUtterances, numLabels
 
-    # Prepare feature directory for training/testing
     def prepareFeatDir(self):
+        """Prepare feature directory for training/testing"""
+
         # Create output directory
         os.makedirs(self.featDir, exist_ok=False)
         self.numSplit = -(-self.numUtterances // self.maxSplitDataSize)
@@ -158,16 +162,18 @@ class WAV2featExtractor:
             self.saveNextSplitData()
         self.wll.seek(0)  # For future use
 
-    # Process (return) feature and label for one utterance
     def processUtterance(self, wl):
+        """Process (return) feature and label for one utterance"""
+
         if not wl:
             return None, None
         w, label = wl.split()
         feat = self.extract(w)
         return w, feat, int(label) * numpy.ones(len(feat), dtype=numpy.int32)
 
-    # Save a split
     def saveNextSplitData(self):
+        """Save a split"""
+
         lines = [self.wll.readline() for n in range(self.maxSplitDataSize)]
         featLabList = [self.processUtterance(wl) for wl in lines if wl]
 
@@ -192,8 +198,8 @@ class WAV2featExtractor:
                 for ufl in featLabList:
                     pickle.dump(ufl, f)
 
-    # Make the object iterable and retrieve one utterance each time
     def __iter__(self):
+        """Make the object iterable and retrieve one utterance each time"""
         for wl in self.wll:
             yield self.processUtterance(wl)
 
