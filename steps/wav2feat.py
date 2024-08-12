@@ -23,7 +23,6 @@
 import argparse
 import os
 import pickle
-import sys
 
 import h5py
 import numpy
@@ -38,7 +37,7 @@ class WAV2featExtractor:
         self.mode = mode
         self.maxSplitDataSize = 100  ## Utterances
 
-        if param == None:
+        if param is None:
             param = {
                 "windowLength": 10,  ## milliseconds (We do splicing later)
                 "windowShift": 10,  ## milliseconds. Keep this same as above.
@@ -196,7 +195,7 @@ class WAV2featExtractor:
     ## Make the object iterable and retrieve one utterance each time
     def __iter__(self):
         for wl in self.wll:
-            yield processUtterance(wl)
+            yield self.processUtterance(wl)
 
 
 def main():
@@ -217,8 +216,11 @@ def main():
     # fmt: on
     args = parser.parse_args()
 
-    w2f = WAV2featExtractor(args.wav_list_file, featDir=args.feature_dir, mode=args.mode)
+    w2f = WAV2featExtractor(
+        args.wav_list_file, featDir=args.feature_dir, mode=args.mode
+    )
     w2f.prepareFeatDir()
+
 
 if __name__ == "__main__":
     main()
