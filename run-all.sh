@@ -76,7 +76,7 @@ test_feat=${OUTPUT}/test_feat
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || python3 steps/test.py $test_feat $exp/cnn.keras $exp
+[ -s $exp/scores.txt ] || python3 steps/test.py --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --verbose 0
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
 
 echo "Script took $(date -u -d @${SECONDS} +"%T")"

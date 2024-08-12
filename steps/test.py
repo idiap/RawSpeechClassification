@@ -20,7 +20,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
-
+import argparse
 import sys
 
 from pathlib import Path
@@ -35,8 +35,11 @@ if Version(keras.__version__) < Version("3"):
 else:
     from rawdataset import RawDataset as rawGenerator
 
+import utils
 
-def test(test_dir, model, output_dir):
+
+def test(test_dir, model, output_dir, verbose=0):
+    Path(model).parent.mkdir(exist_ok=True, parents=True)
     Path(output_dir).mkdir(exist_ok=True, parents=True)
 
     r = rawGenerator(test_dir, mode="test")
@@ -44,7 +47,7 @@ def test(test_dir, model, output_dir):
 
     spk_scores, spk_labels, spk_counts = {}, {}, {}
     for w, feat, l in r:
-        pred = m.predict(feat, verbose=0)
+        pred = m.predict(feat, verbose=verbose)
 
         ## Get the speaker ID. This is useful when each speaker has multiple utterances and
         ## the results need to be calculated per speaker instead of per utterance. You need
@@ -82,9 +85,13 @@ def test(test_dir, model, output_dir):
         print(accuracy, file=f)
 
 
-if __name__ == "__main__":
-    test_dir = sys.argv[1]
-    model = sys.argv[2]
-    output_dir = sys.argv[3]
+def main():
+    parser = argparse.ArgumentParser(description="Test the model")
+    utils.add_default_options(parser)
+    args = parser.parse_args()
 
-    test(test_dir, model, output_dir)
+    test(args.feature_dir, args.model_filename, args.output_dir, args.verbose)
+
+
+if __name__ == "__main__":
+    main()
