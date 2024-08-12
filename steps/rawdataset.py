@@ -24,6 +24,8 @@
 import os
 import pickle
 
+from pathlib import Path
+
 import h5py
 import keras
 import numpy as np
@@ -40,7 +42,7 @@ class RawDataset(keras.utils.PyDataset):
 
         self.stdFloor = 1e-3
         self.context = (self.spliceSize - 1) // 2
-        infoFile = self.featDir + "/info.npy"
+        infoFile = Path(self.featDir) / "info.npy"
         self.info = np.load(infoFile, allow_pickle=True).item()
 
         # Set attributes from info
