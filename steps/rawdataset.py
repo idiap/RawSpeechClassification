@@ -1,24 +1,24 @@
 # coding=utf-8
 
-## Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
-## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
-## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
+# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
+# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+# and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
+# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
-## This file is part of RawSpeechClassification.
+# This file is part of RawSpeechClassification.
 ##
-## RawSpeechClassification is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 3 as
-## published by the Free Software Foundation.
+# RawSpeechClassification is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
 ##
-## RawSpeechClassification is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
+# RawSpeechClassification is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 ##
-## You should have received a copy of the GNU General Public License
-## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 
 import os
@@ -43,7 +43,7 @@ class RawDataset(keras.utils.PyDataset):
         infoFile = self.featDir + "/info.npy"
         self.info = np.load(infoFile, allow_pickle=True).item()
 
-        ## Set attributes from info
+        # Set attributes from info
         self.numUtterances = self.info["numUtterances"]
         self.numFeats = self.info["numFeats"]
         self.numLabels = self.info["numLabels"]
@@ -51,7 +51,7 @@ class RawDataset(keras.utils.PyDataset):
         self.inputFeatDim = self.info["inputFeatDim"] * self.spliceSize
         self.outputFeatDim = self.info["outputFeatDim"]
 
-        ## Compute number of steps
+        # Compute number of steps
         self.numSteps = -(-self.numFeats // self.batchSize)
         self.numDone = 0
 
@@ -64,10 +64,10 @@ class RawDataset(keras.utils.PyDataset):
         self.doUpdateSplit = True
 
     def addContextNorm(self, feat):
-        ## Add context to get the window size
+        # Add context to get the window size
         N = len(feat)
 
-        ## Repeat feat[0], feat[-1] so that we get the same number of spliced feats
+        # Repeat feat[0], feat[-1] so that we get the same number of spliced feats
         feat = np.concatenate(
             [
                 np.tile(feat[0], (self.context, 1)),
@@ -88,7 +88,7 @@ class RawDataset(keras.utils.PyDataset):
     def __len__(self):
         return self.numSteps
 
-    ## Retrieve a mini batch
+    # Retrieve a mini batch
     def __getitem__(self, idx):
         self.numDone += 1
         if self.mode == "train":
@@ -114,7 +114,7 @@ class RawDataset(keras.utils.PyDataset):
                 self.y = np.concatenate((self.y[self.batchPointer :], y))
                 self.batchPointer = 0
 
-                ## Shuffle data
+                # Shuffle data
                 randomInd = np.array(range(len(self.x)))
                 np.random.shuffle(randomInd)
                 self.x = self.x[randomInd]
@@ -129,7 +129,7 @@ class RawDataset(keras.utils.PyDataset):
             self.batchPointer += self.batchSize
             return (xMini, yMini)
 
-        else:  ## Test mode
+        else:  # Test mode
             while True:
                 if self.doUpdateSplit:
                     self.splitDataCounter += 1

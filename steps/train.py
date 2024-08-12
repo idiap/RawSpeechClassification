@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-## Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
-## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
-## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
+# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
+# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+# and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
+# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
-## This file is part of RawSpeechClassification.
+# This file is part of RawSpeechClassification.
 ##
-## RawSpeechClassification is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 3 as
-## published by the Free Software Foundation.
+# RawSpeechClassification is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
 ##
-## RawSpeechClassification is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
+# RawSpeechClassification is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 ##
-## You should have received a copy of the GNU General Public License
-## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
 import inspect
@@ -50,20 +50,20 @@ def train(args):
 
     model_filename = Path(exp) / "cnn.keras"
 
-    ## Learning parameters
+    # Learning parameters
     learning = {
         "rate": args.learning_rate,
         "minEpoch": args.min_epoch,
         "lrScale": args.learning_scale,
         "batchSize": args.batch_size,
         "spliceSize": args.splice_size,
-        ## Threshold on validation loss reduction between
-        ## successive epochs, below which learning rate is scaled.
+        # Threshold on validation loss reduction between
+        # successive epochs, below which learning rate is scaled.
         "minValError": 0.002,
         "minLr": 1e-7,
-    }  ## The final learning rate below which the training stops.
+    }  # The final learning rate below which the training stops.
 
-    ## Number of times the learning rate has to be scaled.
+    # Number of times the learning rate has to be scaled.
     learning["lrScaleCount"] = int(
         np.ceil(np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"]))
     )
@@ -74,7 +74,7 @@ def train(args):
     cvGen = RawDataset(cv_dir, learning["batchSize"], learning["spliceSize"])
     trGen = RawDataset(tr_dir, learning["batchSize"], learning["spliceSize"])
 
-    ## Initialise learning parameters and models
+    # Initialise learning parameters and models
     sgd_args = inspect.getfullargspec(SGD)
 
     if "learning_rate" in sgd_args.args:
@@ -84,11 +84,11 @@ def train(args):
     else:
         s = SGD(lr=learning["rate"], decay=0, momentum=0.5, nesterov=False)
 
-    ## Initialise model
+    # Initialise model
     np.random.seed(512)
     m = model_architecture(arch, trGen.inputFeatDim, trGen.outputFeatDim)
 
-    ## Initial training for "minEpoch-1" epochs
+    # Initial training for "minEpoch-1" epochs
     loss = (
         "binary_crossentropy"
         if trGen.outputFeatDim == 1
@@ -112,9 +112,9 @@ def train(args):
     sys.stdout.flush()
     sys.stderr.flush()
 
-    valErrorDiff = 1 + learning["minValError"]  ## Initialise
+    valErrorDiff = 1 + learning["minValError"]  # Initialise
 
-    ## Continue training till validation loss stagnates
+    # Continue training till validation loss stagnates
     while learning["lrScaleCount"]:
         print("Learning rate: %f" % learning["rate"])
         output = m.fit(
@@ -131,7 +131,7 @@ def train(args):
         sys.stdout.flush()
         sys.stderr.flush()
 
-        ## Check validation error and reduce learning rate if required
+        # Check validation error and reduce learning rate if required
         valErrorDiff = h[-2].history["val_loss"][-1] - h[-1].history["val_loss"][-1]
         if valErrorDiff < learning["minValError"]:
             learning["rate"] *= learning["lrScale"]

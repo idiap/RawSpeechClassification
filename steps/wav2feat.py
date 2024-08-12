@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-## Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
-## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
+# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
+# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
-## This file is part of RawSpeechClassification.
+# This file is part of RawSpeechClassification.
 ##
-## RawSpeechClassification is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 3 as
-## published by the Free Software Foundation.
+# RawSpeechClassification is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
 ##
-## RawSpeechClassification is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
+# RawSpeechClassification is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 ##
-## You should have received a copy of the GNU General Public License
-## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
 import os
@@ -35,15 +35,15 @@ class WAV2featExtractor:
         self.wavLabListFile = wavLabListFile
         self.featDir = featDir
         self.mode = mode
-        self.maxSplitDataSize = 100  ## Utterances
+        self.maxSplitDataSize = 100  # Utterances
 
         if param is None:
             param = {
-                "windowLength": 10,  ## milliseconds (We do splicing later)
-                "windowShift": 10,  ## milliseconds. Keep this same as above.
-                "fs": 16000,  ## Sampling rate in Hertz
+                "windowLength": 10,  # milliseconds (We do splicing later)
+                "windowShift": 10,  # milliseconds. Keep this same as above.
+                "fs": 16000,  # Sampling rate in Hertz
                 "stdFloor": 1e-3,
-            }  ## Floor on standard deviation
+            }  # Floor on standard deviation
             param["windowLengthSamples"] = int(
                 param["windowLength"] * param["fs"] / 1000.0
             )
@@ -61,27 +61,27 @@ class WAV2featExtractor:
         self.inputFeatDim = self.param["windowLengthSamples"]
         self.outputFeatDim = 1 if self.numLabels == 2 else self.numLabels
 
-    ## Exit
+    # Exit
     def __exit__(self):
         self.wll.close()
 
-    ## Feature extraction routine
+    # Feature extraction routine
     def extract(self, wavepath):
-        ## Read data and labels
+        # Read data and labels
         fs, data = wav.read(wavepath)
 
-        ## Append zeros to data if necessary (we add dither later)
+        # Append zeros to data if necessary (we add dither later)
         if len(data) < self.param["windowLengthSamples"]:
             data = numpy.concatenate(
                 [data, numpy.zeros(self.param["windowLengthSamples"] - len(data))]
             )
 
-        ## Determine the number of frames, each of windowshift length
+        # Determine the number of frames, each of windowshift length
         numFeats = (len(data) - self.param["windowLengthSamples"]) // self.param[
             "windowShiftSamples"
         ] + 1
 
-        ## Convert Channel-1 of data into a feature matrix
+        # Convert Channel-1 of data into a feature matrix
         stride = data.strides[-1]
         feat = numpy.lib.stride_tricks.as_strided(
             data,
@@ -90,15 +90,15 @@ class WAV2featExtractor:
         )
         feat = feat.astype(numpy.float32)
 
-        ## Add dither
+        # Add dither
         feat += numpy.random.randn(numFeats, self.param["windowLengthSamples"])
 
-        ## Mean normalise feature matrix
+        # Mean normalise feature matrix
         feat = (feat.T - feat.mean(axis=-1)).T
 
         return feat
 
-    ## Check files in list and return attributes
+    # Check files in list and return attributes
     def checkList(self, wavLabListFile):
         print(f"Checking files in {wavLabListFile}")
         labels = set()
@@ -108,7 +108,7 @@ class WAV2featExtractor:
             w, l = wl.split()
 
             with wave.open(w) as f:
-                ## Check number of channels and sampling rate
+                # Check number of channels and sampling rate
                 msg = (
                     f"ERROR: {w} has multiple channels. "
                     f"Modify the code accordingly and re-run"
@@ -133,13 +133,13 @@ class WAV2featExtractor:
         self.wll.seek(0)
         return numFeats, numUtterances, numLabels
 
-    ## Prepare feature directory for training/testing
+    # Prepare feature directory for training/testing
     def prepareFeatDir(self):
-        ## Create output directory
+        # Create output directory
         os.makedirs(self.featDir, exist_ok=False)
         self.numSplit = -(-self.numUtterances // self.maxSplitDataSize)
 
-        ## Save info
+        # Save info
         self.info = {
             "numFeats": self.numFeats,
             "numUtterances": self.numUtterances,
@@ -152,13 +152,13 @@ class WAV2featExtractor:
         infoFile = f"{self.featDir}/info.npy"
         numpy.save(infoFile, self.info)
 
-        ## In case the object is used as iterator before calling this routine
+        # In case the object is used as iterator before calling this routine
         self.wll.seek(0)
         for self.splitDataCounter in range(1, self.numSplit + 1):
             self.saveNextSplitData()
-        self.wll.seek(0)  ## For future use
+        self.wll.seek(0)  # For future use
 
-    ## Process (return) feature and label for one utterance
+    # Process (return) feature and label for one utterance
     def processUtterance(self, wl):
         if not wl:
             return None, None
@@ -166,7 +166,7 @@ class WAV2featExtractor:
         feat = self.extract(w)
         return w, feat, int(l) * numpy.ones(len(feat), dtype=numpy.int32)
 
-    ## Save a split
+    # Save a split
     def saveNextSplitData(self):
         lines = [self.wll.readline() for n in range(self.maxSplitDataSize)]
         featLabList = [self.processUtterance(wl) for wl in lines if wl]
@@ -176,12 +176,12 @@ class WAV2featExtractor:
             featFile = f"{self.featDir}/{self.splitDataCounter}.x.h5"
             labelFile = f"{self.featDir}/{self.splitDataCounter}.y.h5"
 
-            ## Save features
+            # Save features
             with h5py.File(featFile, "w") as f:
                 for i, feat in enumerate(featList):
                     f.create_dataset(str(i), data=feat, dtype="float32")
 
-            ## Save labels
+            # Save labels
             with h5py.File(labelFile, "w") as f:
                 for i, labels in enumerate(labelList):
                     f.create_dataset(str(i), data=labels, dtype="int32")
@@ -192,7 +192,7 @@ class WAV2featExtractor:
                 for ufl in featLabList:
                     pickle.dump(ufl, f)
 
-    ## Make the object iterable and retrieve one utterance each time
+    # Make the object iterable and retrieve one utterance each time
     def __iter__(self):
         for wl in self.wll:
             yield self.processUtterance(wl)

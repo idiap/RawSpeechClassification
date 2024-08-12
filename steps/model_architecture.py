@@ -1,23 +1,23 @@
 # coding=utf-8
 
-## Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
-## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
+# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
+# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
-## This file is part of RawSpeechClassification.
+# This file is part of RawSpeechClassification.
 ##
-## RawSpeechClassification is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License version 3 as
-## published by the Free Software Foundation.
+# RawSpeechClassification is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
 ##
-## RawSpeechClassification is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
+# RawSpeechClassification is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 ##
-## You should have received a copy of the GNU General Public License
-## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 
 import keras
@@ -70,7 +70,7 @@ def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
     else:
         raise TypeError(f"Unknown architecture: {arch}")
 
-    ## Add the final layer
+    # Add the final layer
     m.add(keras.layers.Dense(outputFeatDim))
     if outputFeatDim == 1:
         m.add(keras.layers.Activation("sigmoid"))
