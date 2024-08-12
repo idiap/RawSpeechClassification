@@ -30,12 +30,11 @@ conda env create -f conda/rsclf-tensorflow.yaml
 
    ```
     </path1/file1.wav> 1
-
     </path2/file2.wav> 0
    ```
 
 1. Configure and run run.sh. Provide model architecture
-   as an argument. See steps\_kt/model\_architecture.py for valid
+   as an argument. See `model_architecture.py` for valid
    options. Optionally, provide an integer as a count of the number of
    times the experiment is repeated. This is useful when the same
    experiment needs to be repeated multiple times with different
