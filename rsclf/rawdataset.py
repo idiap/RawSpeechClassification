@@ -21,7 +21,6 @@
 # along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
 import pickle
 
 from pathlib import Path
