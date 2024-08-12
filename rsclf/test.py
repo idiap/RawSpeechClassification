@@ -38,7 +38,7 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
     m = keras.models.load_model(model)
 
     spk_scores, spk_labels, spk_counts = {}, {}, {}
-    for w, feat, l in r:
+    for w, feat, label in r:
         pred = m.predict(feat, verbose=verbose)
 
         # Get the speaker ID. This is useful when each speaker has multiple utterances and
@@ -56,7 +56,7 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
             spk_counts[spk] = len(pred)
             # NOTE: Assuming the utterance labels are same across each speaker.
             # Takes the label of the speaker's first utterance encountered.
-            spk_labels[spk] = l[0]
+            spk_labels[spk] = label[0]
         else:
             spk_scores[spk] += np.sum(pred, axis=0)
             spk_counts[spk] += len(pred)
