@@ -32,7 +32,6 @@ import numpy as np
 from keras.optimizers import SGD
 
 from model_architecture import model_architecture
-
 from rawdataset import RawDataset
 
 
