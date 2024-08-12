@@ -33,7 +33,6 @@ import keras.backend as K
 import numpy as np
 
 from keras.optimizers import SGD
-from packaging.version import Version
 
 from model_architecture import model_architecture
 
@@ -98,38 +97,16 @@ def train(args):
     m.compile(loss=loss, optimizer=s, metrics=["accuracy"])
     print("Learning rate: %f" % learning["rate"])
 
-    if Version(keras.__version__) < Version("2.5.0"):
-        output = m.fit_generator(
-            trGen,
-            steps_per_epoch=trGen.numSteps,
-            validation_data=cvGen,
-            validation_steps=cvGen.numSteps,
-            epochs=learning["minEpoch"] - 1,
-            verbose=verbose,
-            callbacks=[logger],
-        )
-    elif Version(keras.__version__) < Version("3"):
-        output = m.fit(
-            trGen,
-            steps_per_epoch=trGen.numSteps,
-            validation_data=cvGen,
-            validation_steps=cvGen.numSteps,
-            epochs=learning["minEpoch"] - 1,
-            verbose=verbose,
-            callbacks=[logger],
-        )
-    else:
-        output = m.fit(
-            trGen,
-            validation_data=cvGen,
-            epochs=learning["minEpoch"] - 1,
-            verbose=verbose,
-            shuffle=False,
-            callbacks=[logger],
-        )
+    output = m.fit(
+        trGen,
+        validation_data=cvGen,
+        epochs=learning["minEpoch"] - 1,
+        verbose=verbose,
+        shuffle=False,
+        callbacks=[logger],
+    )
 
     h = [output]
-
 
     m.save(model_filename, overwrite=True)
     sys.stdout.flush()
@@ -140,35 +117,14 @@ def train(args):
     ## Continue training till validation loss stagnates
     while learning["lrScaleCount"]:
         print("Learning rate: %f" % learning["rate"])
-        if Version(keras.__version__) < Version("2.5.0"):
-            output = m.fit_generator(
-                trGen,
-                steps_per_epoch=trGen.numSteps,
-                validation_data=cvGen,
-                validation_steps=cvGen.numSteps,
-                epochs=1,
-                verbose=verbose,
-                callbacks=[logger],
-            )
-        elif Version(keras.__version__) < Version("3"):
-            output = m.fit(
-                trGen,
-                steps_per_epoch=trGen.numSteps,
-                validation_data=cvGen,
-                validation_steps=cvGen.numSteps,
-                epochs=1,
-                verbose=verbose,
-                callbacks=[logger],
-            )
-        else:
-            output = m.fit(
-                trGen,
-                validation_data=cvGen,
-                epochs=1,
-                verbose=verbose,
-                shuffle=False,
-                callbacks=[logger],
-            )
+        output = m.fit(
+            trGen,
+            validation_data=cvGen,
+            epochs=1,
+            verbose=verbose,
+            shuffle=False,
+            callbacks=[logger],
+        )
         h.append(output)
 
         m.save(model_filename, overwrite=True)
@@ -180,10 +136,7 @@ def train(args):
         if valErrorDiff < learning["minValError"]:
             learning["rate"] *= learning["lrScale"]
             learning["lrScaleCount"] -= 1
-            if Version(keras.__version__) < Version("3"):
-                K.set_value(m.optimizer.lr, learning["rate"])
-            else:
-                m.optimizer.learning_rate = learning["rate"]
+            m.optimizer.learning_rate = learning["rate"]
 
 
 def main():
