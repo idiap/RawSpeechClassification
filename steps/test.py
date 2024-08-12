@@ -35,11 +35,9 @@ if Version(keras.__version__) < Version("3"):
 else:
     from rawdataset import RawDataset as rawGenerator
 
-import utils
 
 
 def test(test_dir, model, output_dir, verbose=0):
-    Path(model).parent.mkdir(exist_ok=True, parents=True)
     Path(output_dir).mkdir(exist_ok=True, parents=True)
 
     r = rawGenerator(test_dir, mode="test")
@@ -87,7 +85,24 @@ def test(test_dir, model, output_dir, verbose=0):
 
 def main():
     parser = argparse.ArgumentParser(description="Test the model")
-    utils.add_default_options(parser)
+    # fmt: off
+    parser.add_argument(
+        "--feature-dir", required=True,
+        help="Path to the directory containing the features"
+    )
+    parser.add_argument(
+        "--model-filename", required=True,
+        help="Path to the .keras model"
+    )
+    parser.add_argument(
+        "--output-dir", default="output-results",
+        help="Output directory"
+    )
+    parser.add_argument(
+        "--verbose", type=int, default=0,
+        help="Keras verbose level for fit and predict"
+    )
+    # fmt: on
     args = parser.parse_args()
 
     test(args.feature_dir, args.model_filename, args.output_dir, args.verbose)
