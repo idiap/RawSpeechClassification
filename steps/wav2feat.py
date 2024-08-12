@@ -4,6 +4,7 @@
 ## Copyright (c) 2018 Idiap Research Institute, http://www.idiap.ch/
 ## Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 ## and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
+## and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 ##
 ## This file is part of RawSpeechClassification.
 ##
@@ -19,6 +20,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import os
 import pickle
 import sys
@@ -29,7 +31,7 @@ import scipy.io.wavfile as wav
 import wave
 
 
-class wav2feat:
+class WAV2featExtractor:
     def __init__(self, wavLabListFile, featDir=None, param=None, mode="train"):
         self.wavLabListFile = wavLabListFile
         self.featDir = featDir
@@ -197,11 +199,26 @@ class wav2feat:
             yield processUtterance(wl)
 
 
-## Main function prepares feature directory
-if __name__ == "__main__":
-    wavLabListFile = sys.argv[1]
-    featDir = sys.argv[2]
-    mode = sys.argv[3]
+def main():
+    parser = argparse.ArgumentParser(description="Prepare the features")
+    # fmt: off
+    parser.add_argument(
+        "--wav-list-file", required=True,
+        help="Path to file containing on each row '/path/to/file.wav <label>'"
+    )
+    parser.add_argument(
+        "--mode", required=True, choices=["train", "test"],
+        help="Type of data"
+    )
+    parser.add_argument(
+        "--feature-dir", default="output-features",
+        help="Path where to save the features"
+    )
+    # fmt: on
+    args = parser.parse_args()
 
-    w2f = wav2feat(wavLabListFile, featDir=featDir, mode=mode)
+    w2f = WAV2featExtractor(args.wav_list_file, featDir=args.feature_dir, mode=args.mode)
     w2f.prepareFeatDir()
+
+if __name__ == "__main__":
+    main()
