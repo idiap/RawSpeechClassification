@@ -105,7 +105,7 @@ class WAV2featExtractor:
         numFeats = 0
         numUtterances = 0
         for wl in self.wll:
-            w, l = wl.split()
+            w, label = wl.split()
 
             with wave.open(w) as f:
                 # Check number of channels and sampling rate
@@ -128,7 +128,7 @@ class WAV2featExtractor:
                 1,
             )
             numUtterances += 1
-            labels.update(l)
+            labels.update(label)
         numLabels = len(labels)
         self.wll.seek(0)
         return numFeats, numUtterances, numLabels
@@ -162,9 +162,9 @@ class WAV2featExtractor:
     def processUtterance(self, wl):
         if not wl:
             return None, None
-        w, l = wl.split()
+        w, label = wl.split()
         feat = self.extract(w)
-        return w, feat, int(l) * numpy.ones(len(feat), dtype=numpy.int32)
+        return w, feat, int(label) * numpy.ones(len(feat), dtype=numpy.int32)
 
     # Save a split
     def saveNextSplitData(self):
