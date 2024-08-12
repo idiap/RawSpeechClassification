@@ -251,7 +251,6 @@ def main():
     # fmt: on
     args = parser.parse_args()
 
-    print(args)
     w2f = WAV2featExtractor(
         args.wav_list_file, featDir=args.feature_dir, mode=args.mode, root=args.root
     )
