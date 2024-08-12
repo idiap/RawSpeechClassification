@@ -20,8 +20,8 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
+
 import argparse
-import sys
 
 from pathlib import Path
 
