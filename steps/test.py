@@ -41,10 +41,7 @@ def test(test_dir, model, output_dir):
     r = rawGenerator(test_dir, mode="test")
     m = keras.models.load_model(model)
 
-    spk_scores = {}
-    spk_labels = {}
-    spk_counts = {}
-    i = 0
+    spk_scores, spk_labels, spk_counts = {}, {}, {}
     for w, feat, l in r:
         pred = m.predict(feat, verbose=0)
 
