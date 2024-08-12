@@ -21,7 +21,7 @@ To install Keras 3 with TensorFlow backend, run:
 conda env create -f conda/rsclf-tensorflow.yaml
 ```
 
-## Using the Code
+## Using the code
 
 1. Create lists for training, cross-validation and testing.
    Each line in a list must contain the full path to a wav file,
@@ -33,14 +33,21 @@ conda env create -f conda/rsclf-tensorflow.yaml
     </path2/file2.wav> 0
    ```
 
-1. Configure and run run.sh. Provide model architecture as an
+1. Configure and run [`run.sh`](run.sh). Provide model architecture as an
    argument. See [`model_architecture.py`](rsclf/model_architecture.py)
    for valid options. Optionally, provide an integer as a count of the
    number of times the experiment is repeated. This is useful when the
    same experiment needs to be repeated multiple times with different
    initialisations. The argument defaults to 1.
 
-## Code Components
+This is an example of how to run on the IEMOCAP dataset assuming conda
+installed in `~/miniconda3` and your environment is `rsclf`
+
+```bash
+bash run.sh -C ~/miniconda3 -n rsclf -D ./datasets/IEMOCAP/F1_lists -a seg -o results/seg-f1 -R <IEMOCAP_ROOT>
+```
+
+## Code components
 
 1. [`wav2feat.py`](rsclf/wav2feat.py) creates directories where the
    wav files are stored as fixed length frames for faster access
@@ -64,7 +71,7 @@ conda env create -f conda/rsclf-tensorflow.yaml
     <speakerID> <label> [<posterior_probability_vector>]
    ```
 
-## Training Schedule
+## Training schedule
 
 The script uses stochastic gradient descent with 0.5 momentum. It
 starts with a learning rate of 0.1 for a minimum of 5 epochs. Whenever
