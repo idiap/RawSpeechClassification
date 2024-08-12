@@ -23,13 +23,11 @@
 
 import argparse
 import inspect
-import os
 import sys
 
 from pathlib import Path
 
 import keras
-import keras.backend as K
 import numpy as np
 
 from keras.optimizers import SGD
