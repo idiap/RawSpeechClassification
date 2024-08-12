@@ -24,6 +24,8 @@ import argparse
 import os
 import pickle
 
+from pathlib import Path
+
 import h5py
 import numpy
 import scipy.io.wavfile as wav
@@ -31,13 +33,25 @@ import wave
 
 
 class WAV2featExtractor:
+    """Extractor from wav files to features
 
-    def __init__(self, wavLabListFile, featDir=None, param=None, mode="train"):
+    Args:
+
+      wavLabListFile (str):
+      featDir (str): Output directory where to save the features
+      param:
+      mode (str): Mode of the data 'train' or 'test'
+      root (str): Prefix to append to the path
+
+    """
+
+    def __init__(self, wavLabListFile, featDir=None, param=None, mode="train", root=""):
 
         self.wavLabListFile = wavLabListFile
         self.featDir = featDir
         self.mode = mode
         self.maxSplitDataSize = 100  # Utterances
+        self.root = root
 
         if param is None:
             param = {
@@ -65,6 +79,15 @@ class WAV2featExtractor:
 
     def __exit__(self):
         self.wll.close()
+
+    def add_root(self, filename):
+        if self.root:
+            filename = str(Path(self.root) / filename)
+
+        if not Path(filename).is_file():
+            raise FileNotFoundError(f"File {filename} not found")
+
+        return str(filename)
 
     def extract(self, wavepath):
         """Feature extraction routine"""
@@ -109,6 +132,7 @@ class WAV2featExtractor:
         numUtterances = 0
         for wl in self.wll:
             w, label = wl.split()
+            w = self.add_root(w)
 
             with wave.open(w) as f:
                 # Check number of channels and sampling rate
@@ -168,6 +192,7 @@ class WAV2featExtractor:
         if not wl:
             return None, None
         w, label = wl.split()
+        w = self.add_root(w)
         feat = self.extract(w)
         return w, feat, int(label) * numpy.ones(len(feat), dtype=numpy.int32)
 
@@ -208,6 +233,10 @@ def main():
     parser = argparse.ArgumentParser(description="Prepare the features")
     # fmt: off
     parser.add_argument(
+        "--root", default=None,
+        help="Prefix to add in front of path names if provided. (e.g. root=/ssd/dataset/IEMOCAP)"
+    )
+    parser.add_argument(
         "--wav-list-file", required=True,
         help="Path to file containing on each row '/path/to/file.wav <label>'"
     )
@@ -222,8 +251,9 @@ def main():
     # fmt: on
     args = parser.parse_args()
 
+    print(args)
     w2f = WAV2featExtractor(
-        args.wav_list_file, featDir=args.feature_dir, mode=args.mode
+        args.wav_list_file, featDir=args.feature_dir, mode=args.mode, root=args.root
     )
     w2f.prepareFeatDir()
 
