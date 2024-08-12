@@ -6,18 +6,18 @@
 # and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
 # and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
 # and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
-##
+#
 # This file is part of RawSpeechClassification.
-##
+#
 # RawSpeechClassification is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
 # published by the Free Software Foundation.
-##
+#
 # RawSpeechClassification is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-##
+#
 # You should have received a copy of the GNU General Public License
 # along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
