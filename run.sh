@@ -69,6 +69,9 @@ if [[ `conda list | grep torch` ]] ; then
 elif [[ `conda list | grep tensorflow` ]] ; then
   echo "Using tensorflow backend"
   export KERAS_BACKEND=tensorflow
+elif [[ `conda list | grep jaxlib` ]] ; then
+  echo "Using jax backend"
+  export KERAS_BACKEND=jax
 fi
 
 mkdir -p ${OUTPUT}
