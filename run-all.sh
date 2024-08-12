@@ -23,7 +23,7 @@
 # along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 
-# bash ${0} -C ~/miniconda3 -n rsclf-torch -D /path/to/dir
+# bash ${0} -C ~/miniconda3 -n rsclf-torch -D /path/to/dir -R /path/to/dataset
 
 echo "Start to run on $(hostname) at $(date +'%F %T')"
 SECONDS=0
@@ -31,13 +31,14 @@ SECONDS=0
 CONDA_HOME=
 CONDA_ENV=
 
+spliceSize=25
 arch="subseg"
-iter=1
 datadir=
+ROOT=""
 
 ######################################################################
 
-while getopts ":C:n:o:a:D:" opt
+while getopts ":C:n:o:a:D:R:" opt
 do
   case ${opt} in
     C) CONDA_HOME="${OPTARG}" ;;
@@ -45,6 +46,7 @@ do
     o) OUTPUT="${OPTARG}" ;;
     a) arch="${OPTARG}" ;;
     D) datadir="${OPTARG}" ;;
+    R) ROOT="${OPTARG}" ;;
     \?) echo "Invalid option -%s\n" "${OPTARG}" ; exit 1 ;;
   esac
 done
@@ -60,7 +62,6 @@ shift $(( OPTIND - 1 ))
 
 eval "$(${CONDA_HOME}/bin/conda shell.bash hook)"
 conda activate ${CONDA_ENV}
-export PYTHONPATH=$PWD/steps:$PYTHONPATH
 
 if [[ `conda list | grep torch` ]] ; then
   echo "Using torch backend"
@@ -77,7 +78,7 @@ conda list > ${OUTPUT}/env.txt
 
 echo "Using architecture '${arch}'"
 
-exp=${OUTPUT}/cnn_${arch}_${iter} # Output directory
+exp=${OUTPUT}/cnn_${arch} # Output directory
 
 # Wav file lists
 train_list=${datadir}/train.list
@@ -89,12 +90,10 @@ train_feat=${OUTPUT}/train_feat
 cv_feat=${OUTPUT}/cv_feat
 test_feat=${OUTPUT}/test_feat
 
-spliceSize=25
-
 # Extract features
-[ -d $cv_feat ] || python3 rsclf/wav2feat.py --wav-list-file $cv_list --feature-dir $cv_feat --mode "train"
-[ -d $train_feat ] || python3 rsclf/wav2feat.py --wav-list-file $train_list --feature-dir $train_feat --mode "train"
-[ -d $test_feat ] || python3 rsclf/wav2feat.py --wav-list-file $test_list --feature-dir $test_feat --mode "test"
+[ -d $cv_feat ] || python3 rsclf/wav2feat.py --wav-list-file $cv_list --feature-dir $cv_feat --mode "train" --root "${ROOT}"
+[ -d $train_feat ] || python3 rsclf/wav2feat.py --wav-list-file $train_list --feature-dir $train_feat --mode "train" --root "${ROOT}"
+[ -d $test_feat ] || python3 rsclf/wav2feat.py --wav-list-file $test_list --feature-dir $test_feat --mode "test" --root "${ROOT}"
 
 # Train
 [ -f $exp/cnn.keras ] || python3 rsclf/train.py --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --splice-size $spliceSize --verbose 2
