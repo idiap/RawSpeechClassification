@@ -1,6 +1,6 @@
 # coding=utf-8
 
-# Copyright (c) 2018-2024 Idiap Research Institute, http://www.idiap.ch/
+# Copyright (c) 2018-2024 Idiap Research Institute <https://www.idiap.ch>
 # Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
 # and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
 # and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
