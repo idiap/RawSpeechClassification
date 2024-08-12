@@ -21,10 +21,12 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
-
+import argparse
 import inspect
 import os
 import sys
+
+from pathlib import Path
 
 import keras
 import keras.backend as K
@@ -41,23 +43,68 @@ else:
     from rawdataset import RawDataset as rawGenerator
 
 
+parser = argparse.ArgumentParser(description="Train and validate the model")
+parser.add_argument(
+    "--train-feature-dir", required=True,
+    help="Path to the directory containing the features for training"
+)
+parser.add_argument(
+    "--validation-feature-dir", required=True,
+    help="Path to the directory containing the features for validation"
+)
+parser.add_argument(
+    "--arch", default="seg",
+    help="Model architecture name"
+)
+parser.add_argument(
+    "--slice-split", type=int, default=25,
+    help="Slice size for feature context"
+)
+parser.add_argument(
+    "--learning-rate", type=float, default=0.1,
+    help="Initial learning rate"
+)
+parser.add_argument(
+    "--learning-scale", type=float, default=0.5,
+    help="Factor by which to reduce the learning rate"
+)
+parser.add_argument(
+    "--batch-size", type=int, default=256,
+    help="Batch size"
+)
+parser.add_argument(
+    "--min-epoch", type=int, default=5,
+    help="Minimum epochs to run before reducing learning rate"
+)
+parser.add_argument(
+    "--output-dir", default="output-results",
+    help="Output directory"
+)
+parser.add_argument(
+    "--verbose", type=int, default=0,
+    help="Keras verbose level for fit and predict"
+)
+args = parser.parse_args()
+
+
 if __name__ != "__main__":
     raise ImportError("This script can only be run, and can't be imported")
 
-if len(sys.argv) != 5:
-    raise TypeError("USAGE: train.py tr_dir cv_dir dnn_dir arch")
 
-tr_dir = sys.argv[1]
-cv_dir = sys.argv[2]
-exp = sys.argv[3]
-arch = sys.argv[4]
+tr_dir = args.train_feature_dir
+cv_dir = args.validation_feature_dir
+exp = args.output_dir
+arch = args.arch
+verbose = args.verbose
+
+model_filename = Path(exp) / "cnn.keras"
 
 ## Learning parameters
 learning = {
-    "rate": 0.1,  ## Initial learning rate
-    "minEpoch": 5,  ## Minimum epochs to run before reducing learning rate
-    "lrScale": 0.5,  ## Scale factor to learning rate
-    "batchSize": 256,  ## Batch size
+    "rate": args.learning_rate,
+    "minEpoch": args.min_epoch,
+    "lrScale": args.learning_scale,
+    "batchSize": args.batch_size,
     ## Threshold on validation loss reduction between
     ## successive epochs, below which learning rate is scaled.
     "minValError": 0.002,
@@ -69,8 +116,8 @@ learning["lrScaleCount"] = int(
     np.ceil(np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"]))
 )
 
-os.makedirs(exp, exist_ok=True)
-logger = keras.callbacks.CSVLogger(exp + "/log.dat", separator=" ", append=True)
+Path(exp).mkdir(exist_ok=True, parents=True)
+logger = keras.callbacks.CSVLogger(Path(exp) / "log.dat", separator=" ", append=True)
 
 cvGen = rawGenerator(cv_dir, learning["batchSize"])
 trGen = rawGenerator(tr_dir, learning["batchSize"])
@@ -105,7 +152,7 @@ if Version(keras.__version__) < Version("2.5.0"):
         validation_data=cvGen,
         validation_steps=cvGen.numSteps,
         epochs=learning["minEpoch"] - 1,
-        verbose=2,
+        verbose=verbose,
         callbacks=[logger],
     )
 elif Version(keras.__version__) < Version("3"):
@@ -115,7 +162,7 @@ elif Version(keras.__version__) < Version("3"):
         validation_data=cvGen,
         validation_steps=cvGen.numSteps,
         epochs=learning["minEpoch"] - 1,
-        verbose=2,
+        verbose=verbose,
         callbacks=[logger],
     )
 else:
@@ -123,14 +170,15 @@ else:
         trGen,
         validation_data=cvGen,
         epochs=learning["minEpoch"] - 1,
-        verbose=2,
+        verbose=verbose,
         shuffle=False,
         callbacks=[logger],
     )
 
 h = [output]
 
-m.save(exp + "/cnn.keras", overwrite=True)
+
+m.save(model_filename, overwrite=True)
 sys.stdout.flush()
 sys.stderr.flush()
 
@@ -146,7 +194,7 @@ while learning["lrScaleCount"]:
             validation_data=cvGen,
             validation_steps=cvGen.numSteps,
             epochs=1,
-            verbose=2,
+            verbose=verbose,
             callbacks=[logger],
         )
     elif Version(keras.__version__) < Version("3"):
@@ -156,7 +204,7 @@ while learning["lrScaleCount"]:
             validation_data=cvGen,
             validation_steps=cvGen.numSteps,
             epochs=1,
-            verbose=2,
+            verbose=verbose,
             callbacks=[logger],
         )
     else:
@@ -164,13 +212,13 @@ while learning["lrScaleCount"]:
             trGen,
             validation_data=cvGen,
             epochs=1,
-            verbose=2,
+            verbose=verbose,
             shuffle=False,
             callbacks=[logger],
         )
     h.append(output)
 
-    m.save(exp + "/cnn.keras", overwrite=True)
+    m.save(model_filename, overwrite=True)
     sys.stdout.flush()
     sys.stderr.flush()
 
