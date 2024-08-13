@@ -7,3 +7,4 @@ dependencies:
     - scipy
     - --extra-index-url https://pypi.nvidia.com
     - tensorflow[and-cuda]==2.16.2
+    - matplotlib
