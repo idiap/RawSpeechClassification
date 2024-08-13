@@ -41,13 +41,18 @@ conda env create -f conda/rsclf-tensorflow.yaml
    initialisations. The argument defaults to 1.
 
 This is an example of how to run on the IEMOCAP dataset assuming conda
-installed in `~/miniconda3` and your environment is `rsclf`
+installed in `~/miniconda3` and your environment is `rsclf`:
 
 ```bash
 bash run.sh -C ~/miniconda3 -n rsclf -D ./datasets/IEMOCAP/F1_lists -a seg -o results/seg-f1 -R <IEMOCAP_ROOT>
 ```
 
-You should obtain the following curve in `results/seg-f1/plot.png`:
+For instance, `<IEMOCAP_ROOT>` can be `/ssd/data/IEMOCAP` which should
+contain `IEMOCAP_full_release/Session*`.
+
+This is an [example](./docs/log.txt) of the log printed to the
+terminal and you should obtain the following curve in
+`results/seg-f1/plot.png`:
 
 ![Results](./docs/plot.png)
 
