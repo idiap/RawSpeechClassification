@@ -47,6 +47,10 @@ installed in `~/miniconda3` and your environment is `rsclf`
 bash run.sh -C ~/miniconda3 -n rsclf -D ./datasets/IEMOCAP/F1_lists -a seg -o results/seg-f1 -R <IEMOCAP_ROOT>
 ```
 
+You should obtain the following curve in `results/seg-f1/plot.png`:
+
+![Results](./docs/plot.png)
+
 ## Code components
 
 1. [`wav2feat.py`](rsclf/wav2feat.py) creates directories where the
