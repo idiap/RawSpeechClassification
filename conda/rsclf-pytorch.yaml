@@ -1,0 +1,16 @@
+name: rsclf
+dependencies:
+  - python=3.11
+  - pytorch::pytorch=2
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.1
+  - nvidia::cuda=12.1
+  - numpy
+  - pip
+  - pip:
+    - keras==3.4.1
+    - h5py
+    - scipy
+    - matplotlib
+    - polars

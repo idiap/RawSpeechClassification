@@ -1,0 +1,104 @@
+Start to run on computer at 2024-08-13 10:55:18
+Using torch backend
+Using architecture 'seg'
+Checking files in ./datasets/IEMOCAP/F1_lists/cv.list
+{'numFeats': 386586, 'numUtterances': 858, 'numLabels': 4, 'numSplit': 9, 'inputFeatDim': 160, 'outputFeatDim': 4}
+Checking files in ./datasets/IEMOCAP/F1_lists/train.list
+{'numFeats': 1570850, 'numUtterances': 3432, 'numLabels': 4, 'numSplit': 35, 'inputFeatDim': 160, 'outputFeatDim': 4}
+Checking files in ./datasets/IEMOCAP/F1_lists/test.list
+{'numFeats': 555840, 'numUtterances': 1241, 'numLabels': 4, 'numSplit': 13, 'inputFeatDim': 160, 'outputFeatDim': 4}
+Learning rate: 0.1
+Epoch 1/4
+6137/6137 - 96s - 16ms/step - accuracy: 0.5115 - loss: 1.0958 - val_accuracy: 0.3475 - val_loss: 1.5096
+Epoch 2/4
+6137/6137 - 90s - 15ms/step - accuracy: 0.5787 - loss: 0.9756 - val_accuracy: 0.3656 - val_loss: 1.9362
+Epoch 3/4
+6137/6137 - 90s - 15ms/step - accuracy: 0.6283 - loss: 0.8879 - val_accuracy: 0.3786 - val_loss: 1.9146
+Epoch 4/4
+6137/6137 - 90s - 15ms/step - accuracy: 0.6541 - loss: 0.8387 - val_accuracy: 0.3865 - val_loss: 2.1355
+Learning rate: 0.1
+6137/6137 - 91s - 15ms/step - accuracy: 0.6779 - loss: 0.7887 - val_accuracy: 0.3955 - val_loss: 2.2106
+Learning rate: 0.05
+6137/6137 - 91s - 15ms/step - accuracy: 0.6983 - loss: 0.7461 - val_accuracy: 0.4016 - val_loss: 2.4864
+Learning rate: 0.025
+6137/6137 - 90s - 15ms/step - accuracy: 0.7369 - loss: 0.6635 - val_accuracy: 0.3915 - val_loss: 2.5174
+Learning rate: 0.0125
+6137/6137 - 91s - 15ms/step - accuracy: 0.7554 - loss: 0.6208 - val_accuracy: 0.3948 - val_loss: 2.5896
+Learning rate: 0.00625
+6137/6137 - 91s - 15ms/step - accuracy: 0.7487 - loss: 0.6354 - val_accuracy: 0.3946 - val_loss: 2.4371
+Learning rate: 0.00625
+6137/6137 - 90s - 15ms/step - accuracy: 0.7738 - loss: 0.5780 - val_accuracy: 0.3923 - val_loss: 2.6185
+Learning rate: 0.003125
+6137/6137 - 91s - 15ms/step - accuracy: 0.7527 - loss: 0.6253 - val_accuracy: 0.3970 - val_loss: 2.3507
+Learning rate: 0.003125
+6137/6137 - 91s - 15ms/step - accuracy: 0.7668 - loss: 0.5918 - val_accuracy: 0.3963 - val_loss: 2.3962
+Learning rate: 0.0015625
+6137/6137 - 91s - 15ms/step - accuracy: 0.7329 - loss: 0.6667 - val_accuracy: 0.3995 - val_loss: 2.1599
+Learning rate: 0.0015625
+6137/6137 - 91s - 15ms/step - accuracy: 0.7419 - loss: 0.6459 - val_accuracy: 0.3990 - val_loss: 2.1904
+Learning rate: 0.00078125
+6137/6137 - 92s - 15ms/step - accuracy: 0.7016 - loss: 0.7339 - val_accuracy: 0.4054 - val_loss: 1.9599
+Learning rate: 0.00078125
+6137/6137 - 90s - 15ms/step - accuracy: 0.7066 - loss: 0.7216 - val_accuracy: 0.4061 - val_loss: 1.9464
+Learning rate: 0.00078125
+6137/6137 - 91s - 15ms/step - accuracy: 0.7120 - loss: 0.7092 - val_accuracy: 0.4062 - val_loss: 1.9520
+Learning rate: 0.000390625
+6137/6137 - 91s - 15ms/step - accuracy: 0.6748 - loss: 0.7898 - val_accuracy: 0.4136 - val_loss: 1.7993
+Learning rate: 0.000390625
+6137/6137 - 91s - 15ms/step - accuracy: 0.6787 - loss: 0.7802 - val_accuracy: 0.4150 - val_loss: 1.7793
+Learning rate: 0.000390625
+6137/6137 - 91s - 15ms/step - accuracy: 0.6820 - loss: 0.7732 - val_accuracy: 0.4154 - val_loss: 1.7722
+Learning rate: 0.000390625
+6137/6137 - 91s - 15ms/step - accuracy: 0.6850 - loss: 0.7663 - val_accuracy: 0.4161 - val_loss: 1.7716
+Learning rate: 0.000195313
+6137/6137 - 91s - 15ms/step - accuracy: 0.6579 - loss: 0.8242 - val_accuracy: 0.4263 - val_loss: 1.6624
+Learning rate: 0.000195313
+6137/6137 - 91s - 15ms/step - accuracy: 0.6631 - loss: 0.8123 - val_accuracy: 0.4272 - val_loss: 1.6514
+Learning rate: 0.000195313
+6137/6137 - 90s - 15ms/step - accuracy: 0.6653 - loss: 0.8075 - val_accuracy: 0.4276 - val_loss: 1.6466
+Learning rate: 0.000195313
+6137/6137 - 90s - 15ms/step - accuracy: 0.6673 - loss: 0.8032 - val_accuracy: 0.4280 - val_loss: 1.6436
+Learning rate: 0.000195313
+6137/6137 - 92s - 15ms/step - accuracy: 0.6690 - loss: 0.7993 - val_accuracy: 0.4282 - val_loss: 1.6426
+Learning rate: 9.76563e-05
+6137/6137 - 92s - 15ms/step - accuracy: 0.6558 - loss: 0.8285 - val_accuracy: 0.4332 - val_loss: 1.5882
+Learning rate: 9.76563e-05
+6137/6137 - 93s - 15ms/step - accuracy: 0.6594 - loss: 0.8201 - val_accuracy: 0.4340 - val_loss: 1.5817
+Learning rate: 9.76563e-05
+6137/6137 - 92s - 15ms/step - accuracy: 0.6608 - loss: 0.8169 - val_accuracy: 0.4342 - val_loss: 1.5793
+Learning rate: 9.76563e-05
+6137/6137 - 92s - 15ms/step - accuracy: 0.6620 - loss: 0.8145 - val_accuracy: 0.4341 - val_loss: 1.5783
+Learning rate: 4.88281e-05
+6137/6137 - 92s - 15ms/step - accuracy: 0.6567 - loss: 0.8264 - val_accuracy: 0.4372 - val_loss: 1.5534
+Learning rate: 4.88281e-05
+6137/6137 - 90s - 15ms/step - accuracy: 0.6585 - loss: 0.8220 - val_accuracy: 0.4377 - val_loss: 1.5497
+Learning rate: 4.88281e-05
+6137/6137 - 91s - 15ms/step - accuracy: 0.6593 - loss: 0.8201 - val_accuracy: 0.4380 - val_loss: 1.5479
+Learning rate: 2.44141e-05
+6137/6137 - 91s - 15ms/step - accuracy: 0.6575 - loss: 0.8244 - val_accuracy: 0.4398 - val_loss: 1.5327
+Learning rate: 2.44141e-05
+6137/6137 - 90s - 15ms/step - accuracy: 0.6584 - loss: 0.8223 - val_accuracy: 0.4400 - val_loss: 1.5300
+Learning rate: 2.44141e-05
+6137/6137 - 90s - 15ms/step - accuracy: 0.6587 - loss: 0.8213 - val_accuracy: 0.4401 - val_loss: 1.5288
+Learning rate: 1.2207e-05
+6137/6137 - 91s - 15ms/step - accuracy: 0.6582 - loss: 0.8227 - val_accuracy: 0.4410 - val_loss: 1.5220
+Learning rate: 1.2207e-05
+6137/6137 - 92s - 15ms/step - accuracy: 0.6586 - loss: 0.8217 - val_accuracy: 0.4412 - val_loss: 1.5199
+Learning rate: 1.2207e-05
+6137/6137 - 90s - 15ms/step - accuracy: 0.6588 - loss: 0.8212 - val_accuracy: 0.4412 - val_loss: 1.5188
+Learning rate: 6.10352e-06
+6137/6137 - 90s - 15ms/step - accuracy: 0.6588 - loss: 0.8215 - val_accuracy: 0.4415 - val_loss: 1.5166
+Learning rate: 6.10352e-06
+6137/6137 - 90s - 15ms/step - accuracy: 0.6590 - loss: 0.8211 - val_accuracy: 0.4415 - val_loss: 1.5154
+Learning rate: 3.05176e-06
+6137/6137 - 90s - 15ms/step - accuracy: 0.6590 - loss: 0.8210 - val_accuracy: 0.4416 - val_loss: 1.5145
+Learning rate: 1.52588e-06
+6137/6137 - 90s - 15ms/step - accuracy: 0.6591 - loss: 0.8209 - val_accuracy: 0.4416 - val_loss: 1.5140
+Learning rate: 7.62939e-07
+6137/6137 - 93s - 15ms/step - accuracy: 0.6591 - loss: 0.8209 - val_accuracy: 0.4416 - val_loss: 1.5137
+Learning rate: 3.8147e-07
+6137/6137 - 90s - 15ms/step - accuracy: 0.6591 - loss: 0.8209 - val_accuracy: 0.4417 - val_loss: 1.5136
+Learning rate: 1.90735e-07
+6137/6137 - 89s - 15ms/step - accuracy: 0.6591 - loss: 0.8208 - val_accuracy: 0.4417 - val_loss: 1.5135
+Script took 01:11:15
+End at 2024-08-13 12:06:33
