@@ -61,11 +61,15 @@ def train(args):
 
     # Number of times the learning rate has to be scaled.
     learning["lrScaleCount"] = int(
-        np.ceil(np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"]))
+        np.ceil(
+            np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"])
+        )
     )
 
     Path(exp).mkdir(exist_ok=True, parents=True)
-    logger = keras.callbacks.CSVLogger(Path(exp) / "log.dat", separator=" ", append=True)
+    logger = keras.callbacks.CSVLogger(
+        Path(exp) / "log.dat", separator=" ", append=True
+    )
 
     cvGen = RawDataset(cv_dir, learning["batchSize"], learning["spliceSize"])
     trGen = RawDataset(tr_dir, learning["batchSize"], learning["spliceSize"])
@@ -104,7 +108,7 @@ def train(args):
 
     # Continue training till validation loss stagnates
     while learning["lrScaleCount"]:
-        print("Learning rate: {learning['rate']:g}")
+        print(f"Learning rate: {learning['rate']:g}")
         output = m.fit(
             trGen,
             validation_data=cvGen,
