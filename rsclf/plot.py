@@ -18,17 +18,11 @@
 # along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import json
-import os
-import sys
-import time
 
 from pathlib import Path
 
-import polars as pl
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
+import polars as pl
 
 
 def prepare_figure():
