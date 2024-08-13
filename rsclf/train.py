@@ -70,15 +70,9 @@ def train(args):
     cvGen = RawDataset(cv_dir, learning["batchSize"], learning["spliceSize"])
     trGen = RawDataset(tr_dir, learning["batchSize"], learning["spliceSize"])
 
-    # Initialise learning parameters and models
-    sgd_args = inspect.getfullargspec(SGD)
-
-    if "learning_rate" in sgd_args.args:
-        s = SGD(
-            learning_rate=learning["rate"], weight_decay=0, momentum=0.5, nesterov=False
-        )
-    else:
-        s = SGD(lr=learning["rate"], decay=0, momentum=0.5, nesterov=False)
+    s = SGD(
+        learning_rate=learning["rate"], weight_decay=0, momentum=0.5, nesterov=False
+    )
 
     # Initialise model
     np.random.seed(512)
