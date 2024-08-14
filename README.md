@@ -9,6 +9,8 @@ scores from the fixed length signals.
 
 ## Installation
 
+### In a Conda environment
+
 To install Keras 3 with PyTorch backend, run:
 
 ```bash
@@ -21,26 +23,53 @@ To install Keras 3 with TensorFlow backend, run:
 conda env create -f conda/rsclf-tensorflow.yaml
 ```
 
+### With pip
+
+If you want to install this package from pypi, you can run the following:
+
+```bash
+pip install raw-speech-classification
+```
+
+By default it install with pytorch, but you can install tensorflow. You'll need to set
+the `KERAS_BACKEND` environment variable to the correct backend:
+
+```bash
+export KERAS_BACKEND=torch
+```
+
 ## Using the code
 
 1. Create lists for training, cross-validation and testing.
-   Each line in a list must contain the full path to a wav file,
-   follwed by its integer label indexed from 0, separated by a space.
-   E.g:
+   Each line in a list must contain the path to a wav file (relative to the `-R` _conda
+   install_ or `--root` _pip install_ option), followed by its integer label indexed
+   from 0, separated by a space.
+   E.g if your files are in `/home/bob/data/my_dataset/file*.wav`, set the `root` option
+   to `/home/bob/data` and the content of the files as:
 
+   ```txt
+   my_dataset/file1.wav 1
+   my_dataset/file2.wav 0
    ```
-    </path1/file1.wav> 1
-    </path2/file2.wav> 0
+
+1. **If you installed with Conda:** Configure and run [`run.sh`](run.sh). Provide model
+   architecture as an argument. See
+   [`model_architecture.py`](rsclf/model_architecture.py) for valid options. Optionally,
+   provide an integer as a count of the number of times the experiment is repeated. This
+   is useful when the same experiment needs to be repeated multiple times with different
+   initializations. The argument defaults to 1.
+
+   **If you installed with pip:** You can run the following commands:
+
+   ```bash
+   rsclf-wav2feat --wav-list-file list_files/cv.list --feature-dir output/cv_feat --mode train --root path/to/dataset/basedir
+   rsclf-wav2feat --wav-list-file list_files/train.list --feature-dir output/train_feat --mode train --root path/to/dataset/basedir
+   rsclf-wav2feat --wav-list-file list_files/test.list --feature-dir output/test_feat --mode test --root path/to/dataset/basedir
+   KERAS_BACKEND=torch rsclf-train --train-feature-dir output/train_feat --validation-feature-dir output/cv_feat --output-dir output/cnn_subseg --arch subseg --splice-size 25 --verbose 2
+   KERAS_BACKEND=torch rsclf-test --feature-dir output/test_feat --model-filename output/cnn_subseg/cnn.keras --output-dir output/cnn_subseg --splice-size 25 --verbose 0
    ```
 
-1. Configure and run [`run.sh`](run.sh). Provide model architecture as an
-   argument. See [`model_architecture.py`](rsclf/model_architecture.py)
-   for valid options. Optionally, provide an integer as a count of the
-   number of times the experiment is repeated. This is useful when the
-   same experiment needs to be repeated multiple times with different
-   initialisations. The argument defaults to 1.
-
-This is an example of how to run on the IEMOCAP dataset assuming conda
+This is an example of how to run on the IEMOCAP dataset using conda assuming conda is
 installed in `~/miniconda3` and your environment is `rsclf`:
 
 ```bash
@@ -76,7 +105,7 @@ terminal and you should obtain the following curve in
    speaker, configure it accordingly (see the script for details). The
    default output format is:
 
-   ```
+   ```txt
     <speakerID> <label> [<posterior_probability_vector>]
    ```
 
