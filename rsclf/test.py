@@ -28,7 +28,7 @@ from pathlib import Path
 import keras
 import numpy as np
 
-from rawdataset import RawDataset
+from .rawdataset import RawDataset
 
 
 def test(test_dir, model, output_dir, splice_size=25, verbose=0):
@@ -103,7 +103,13 @@ def main():
     # fmt: on
     args = parser.parse_args()
 
-    test(args.feature_dir, args.model_filename, args.output_dir, args.splice_size, args.verbose)
+    test(
+        args.feature_dir,
+        args.model_filename,
+        args.output_dir,
+        args.splice_size,
+        args.verbose,
+    )
 
 
 if __name__ == "__main__":

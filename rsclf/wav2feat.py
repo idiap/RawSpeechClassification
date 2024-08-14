@@ -23,13 +23,13 @@
 import argparse
 import os
 import pickle
+import wave
 
 from pathlib import Path
 
 import h5py
 import numpy
 import scipy.io.wavfile as wav
-import wave
 
 
 class WAV2featExtractor:
@@ -46,7 +46,6 @@ class WAV2featExtractor:
     """
 
     def __init__(self, wavLabListFile, featDir=None, param=None, mode="train", root=""):
-
         self.wavLabListFile = wavLabListFile
         self.featDir = featDir
         self.mode = mode

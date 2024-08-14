@@ -22,7 +22,6 @@
 # along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import inspect
 
 from pathlib import Path
 
@@ -30,9 +29,8 @@ import keras
 import numpy as np
 
 from keras.optimizers import SGD
-
-from model_architecture import model_architecture
-from rawdataset import RawDataset
+from .model_architecture import model_architecture
+from .rawdataset import RawDataset
 
 
 def train(args):
