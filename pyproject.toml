@@ -1,0 +1,55 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "raw-speech-classification"
+version = "1.0.0"
+license = {file = "COPYING"}
+authors = [
+    { name = "S. Pavankumar Dubagunta" },
+    { name = "Dr. Mathew Magimai-Doss" },
+]
+maintainers = [
+    { name = "Philip Abbet" },
+    { name = "ocanevet" },
+    { name = "Yannick Dayer", email = "yannick.dayer@idiap.ch" },
+]
+description = "Trains CNN classifiers from raw speech using Keras and tests them."
+requires-python = "~=3.11"
+dependencies = [
+    "keras==3.4.1",
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "numpy",
+    "h5py",
+    "scipy",
+    "matplotlib",
+    "polars",
+]
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Science/Research",
+]
+
+[project.urls]
+Source = "https://github.com/idiap/RawSpeechClassification"
+
+[project.scripts]
+rsclf-train = "rsclf.train:main"
+rsclf-test = "rsclf.test:main"
+rsclf-wav2feat = "rsclf.wav2feat:main"
+rsclf-plot = "rsclf.plot:main"
+
+[tool.flit.module]
+name = "rsclf"
