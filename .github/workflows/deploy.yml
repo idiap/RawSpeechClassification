@@ -1,0 +1,74 @@
+# SPDX-FileCopyrightText: Copyright © 2024 Idiap Research Institute <contact@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
+
+# SPDX-License-Identifier: GPL-3.0
+
+name: deploy release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release-packaging:
+    name: Package the project into a deploy-ready state
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install build dependencies
+        run: |
+          pip install --upgrade pip
+          pip install build
+      - name: Package the project
+        run: python -m build
+      - name: Produce a GitHub actions artifact (the package)
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dist
+          path: dist/
+          if-no-files-found: error
+
+  pypi-publish:
+    name: Upload the release package to PyPI
+    needs:
+      - release-packaging
+    runs-on: ubuntu-22.04
+    environment:
+      name: pypi
+      url: https://pypi.org/p/raw-speech-classification
+    permissions:
+      id-token: write  # This permission is mandatory for trusted publishing
+    steps:
+      - name: Retrieve the package from GitHub actions artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-publish:
+    name: Upload the release package to GitHub Release
+    needs:
+      - release-packaging
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write  # IMPORTANT: mandatory for making GitHub Releases
+    steps:
+      - name: Retrieve the package from GitHub actions artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - name: Upload the release package to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        # Upload to GitHub Release using the `gh` CLI.
+        run: gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'
