@@ -37,12 +37,12 @@ def prepare_figure():
     axs[1, 1].grid(visible=True, linestyle="--")
     return fig, axs
 
-
-if __name__ == "__main__":
+def main():
+    """Create plots showing the performance of the classification for each epoch."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-dir", default=".", help="Output directory")
+    parser.add_argument("--output-dir", default=".", help="Output directory for the plots file")
     parser.add_argument("--extension", default="png", help="Image extension to save")
-    parser.add_argument("dirnames", nargs=argparse.REMAINDER)
+    parser.add_argument("dirnames", nargs=argparse.REMAINDER, help="Location of the Keras trained model")
     args = parser.parse_args()
 
     Path(args.output_dir).mkdir(exist_ok=True, parents=True)
@@ -63,3 +63,6 @@ if __name__ == "__main__":
 
     fig.savefig(Path(args.output_dir) / f"plot.{args.extension}", bbox_inches="tight")
     plt.close(fig)
+
+if __name__ == "__main__":
+    main()
