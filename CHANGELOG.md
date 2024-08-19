@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Changelog
 
 ## August 2024

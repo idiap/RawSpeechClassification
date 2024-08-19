@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 name: rsclf
 dependencies:
   - python=3.6

@@ -1,24 +1,12 @@
 # coding=utf-8
 
-# Copyright (c) 2018-2024 Idiap Research Institute <https://www.idiap.ch>
-# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
-# This file is part of RawSpeechClassification.
+# SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
+# SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
+# SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
 #
-# RawSpeechClassification is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 3 as
-# published by the Free Software Foundation.
-#
-# RawSpeechClassification is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
-
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import keras
 
