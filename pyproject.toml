@@ -16,8 +16,8 @@ authors = [
     { name = "Dr. Mathew Magimai-Doss" },
 ]
 maintainers = [
-    { name = "Philip Abbet" },
-    { name = "ocanevet" },
+    { name = "Olivier Canévet", email="olivier.canevet@idiap.ch" },
+    { name = "Philip Abbet", email = "philip.abbet@idiap.ch" },
     { name = "Yannick Dayer", email = "yannick.dayer@idiap.ch" },
 ]
 description = "Trains CNN classifiers from raw speech using Keras and tests them."
