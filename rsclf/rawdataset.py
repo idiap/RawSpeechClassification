@@ -1,5 +1,3 @@
-# coding=utf-8
-
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
 # SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
@@ -62,17 +60,18 @@ class RawDataset(keras.utils.PyDataset):
                 np.tile(feat[0], (self.context, 1)),
                 feat,
                 np.tile(feat[-1], (self.context, 1)),
-            ]
+            ],
         )
 
         feat = np.lib.stride_tricks.as_strided(
-            feat, strides=feat.strides, shape=(N, self.inputFeatDim)
+            feat,
+            strides=feat.strides,
+            shape=(N, self.inputFeatDim),
         )
 
         std = feat.std(axis=-1)
         std[std < self.stdFloor] = self.stdFloor
-        feat = ((feat.T - feat.mean(axis=-1)) / std).T
-        return feat
+        return ((feat.T - feat.mean(axis=-1)) / std).T
 
     def __len__(self):
         return self.numSteps
@@ -118,7 +117,7 @@ class RawDataset(keras.utils.PyDataset):
             self.batchPointer += self.batchSize
             return (xMini, yMini)
 
-        else:  # Test mode
+        else:  # Test mode # noqa: RET505
             while True:
                 if self.doUpdateSplit:
                     self.splitDataCounter += 1

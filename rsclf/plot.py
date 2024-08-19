@@ -1,13 +1,8 @@
-# coding=utf-8
-
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
 # SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-
-
-# Written by Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 
 import argparse
 
@@ -18,6 +13,7 @@ import polars as pl
 
 
 def prepare_figure():
+    """Set up the axes, grid, and labels of the current figure."""
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))
     axs[0, 0].set_ylabel("Training loss")
     axs[0, 0].grid(visible=True, linestyle="--")
@@ -29,12 +25,21 @@ def prepare_figure():
     axs[1, 1].grid(visible=True, linestyle="--")
     return fig, axs
 
+
 def main():
     """Create plots showing the performance of the classification for each epoch."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output-dir", default=".", help="Output directory for the plots file")
+    parser.add_argument(
+        "--output-dir",
+        default=".",
+        help="Output directory for the plots file",
+    )
     parser.add_argument("--extension", default="png", help="Image extension to save")
-    parser.add_argument("dirnames", nargs=argparse.REMAINDER, help="Location of the Keras trained model")
+    parser.add_argument(
+        "dirnames",
+        nargs=argparse.REMAINDER,
+        help="Location of the Keras trained model",
+    )
     args = parser.parse_args()
 
     Path(args.output_dir).mkdir(exist_ok=True, parents=True)
@@ -55,6 +60,7 @@ def main():
 
     fig.savefig(Path(args.output_dir) / f"plot.{args.extension}", bbox_inches="tight")
     plt.close(fig)
+
 
 if __name__ == "__main__":
     main()

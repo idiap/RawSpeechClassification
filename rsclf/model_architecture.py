@@ -1,5 +1,3 @@
-# coding=utf-8
-
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
 # SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
@@ -12,6 +10,7 @@ import keras
 
 
 def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
+    """Define the speech classification model."""
     if arch == "subseg":
         m = keras.models.Sequential(
             [
@@ -31,7 +30,7 @@ def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
                 keras.layers.GlobalAveragePooling1D(),
                 keras.layers.Dense(10),
                 keras.layers.Activation("relu"),
-            ]
+            ],
         )
 
     elif arch == "seg":
@@ -52,7 +51,7 @@ def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
                 keras.layers.GlobalAveragePooling1D(),
                 keras.layers.Dense(10),
                 keras.layers.Activation("relu"),
-            ]
+            ],
         )
 
     else:

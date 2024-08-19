@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding=utf-8
 
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
@@ -29,11 +28,12 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
     for w, feat, label in r:
         pred = m.predict(feat, verbose=verbose)
 
-        # Get the speaker ID. This is useful when each speaker has multiple utterances and
-        # the results need to be calculated per speaker instead of per utterance. You need
-        # to configure this line according how the speaker ID can be extracted from you data.
-        # For e.g. the below line assumes that the basenames of the files start with speaker ID
-        # followed by an utterance ID, separated by a '_'.
+        # Get the speaker ID. This is useful when each speaker has multiple utterances
+        # and the results need to be calculated per speaker instead of per utterance.
+        # You need to configure this line according how the speaker ID can be extracted
+        # from you data.
+        # For e.g. the below line assumes that the basenames of the files start with
+        # speaker ID followed by an utterance ID, separated by a '_'.
         # spk = w.split('/')[-1].split('_')[0]
         # By default, we use the wav file name as the speaker ID, which means that
         # each wav file corresponds to one speaker.
@@ -70,23 +70,23 @@ def main():
     # fmt: off
     parser.add_argument(
         "--feature-dir", required=True,
-        help="Path to the directory containing the features"
+        help="Path to the directory containing the features",
     )
     parser.add_argument(
         "--model-filename", required=True,
-        help="Path to the .keras model"
+        help="Path to the .keras model",
     )
     parser.add_argument(
         "--output-dir", default="output-results",
-        help="Output directory"
+        help="Output directory",
     )
     parser.add_argument(
         "--splice-size", type=int, default=25,
-        help="Slice size for feature context"
+        help="Slice size for feature context",
     )
     parser.add_argument(
         "--verbose", type=int, default=0,
-        help="Keras verbose level for fit and predict"
+        help="Keras verbose level for fit and predict",
     )
     # fmt: on
     args = parser.parse_args()

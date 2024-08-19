@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding=utf-8
 
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
@@ -18,13 +17,13 @@ import keras
 import numpy as np
 
 from keras.optimizers import SGD
+
 from .model_architecture import model_architecture
 from .rawdataset import RawDataset
 
 
 def train(args):
-    """Train the model by running `min-epoch` at a constant learning rate before reducing it."""
-
+    """Train the model by running `min-epoch` at a constant LR before reducing it."""
     tr_dir = args.train_feature_dir
     cv_dir = args.validation_feature_dir
     exp = args.output_dir
@@ -49,20 +48,25 @@ def train(args):
     # Number of times the learning rate has to be scaled.
     learning["lrScaleCount"] = int(
         np.ceil(
-            np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"])
-        )
+            np.log(learning["minLr"] / learning["rate"]) / np.log(learning["lrScale"]),
+        ),
     )
 
     Path(exp).mkdir(exist_ok=True, parents=True)
     logger = keras.callbacks.CSVLogger(
-        Path(exp) / "log.dat", separator=" ", append=True
+        Path(exp) / "log.dat",
+        separator=" ",
+        append=True,
     )
 
     cvGen = RawDataset(cv_dir, learning["batchSize"], learning["spliceSize"])
     trGen = RawDataset(tr_dir, learning["batchSize"], learning["spliceSize"])
 
     s = SGD(
-        learning_rate=learning["rate"], weight_decay=0, momentum=0.5, nesterov=False
+        learning_rate=learning["rate"],
+        weight_decay=0,
+        momentum=0.5,
+        nesterov=False,
     )
 
     # Initialise model
@@ -121,43 +125,43 @@ def main():
     # fmt: off
     parser.add_argument(
         "--train-feature-dir", required=True,
-        help="Path to the directory containing the features for training"
+        help="Path to the directory containing the features for training",
     )
     parser.add_argument(
         "--validation-feature-dir", required=True,
-        help="Path to the directory containing the features for validation"
+        help="Path to the directory containing the features for validation",
     )
     parser.add_argument(
         "--arch", default="seg",
-        help="Model architecture name"
+        help="Model architecture name",
     )
     parser.add_argument(
         "--splice-size", type=int, default=25,
-        help="Slice size for feature context"
+        help="Slice size for feature context",
     )
     parser.add_argument(
         "--learning-rate", type=float, default=0.1,
-        help="Initial learning rate"
+        help="Initial learning rate",
     )
     parser.add_argument(
         "--learning-scale", type=float, default=0.5,
-        help="Factor by which to reduce the learning rate"
+        help="Factor by which to reduce the learning rate",
     )
     parser.add_argument(
         "--batch-size", type=int, default=256,
-        help="Batch size"
+        help="Batch size",
     )
     parser.add_argument(
         "--min-epoch", type=int, default=5,
-        help="Minimum epochs to run before reducing learning rate"
+        help="Minimum epochs to run before reducing learning rate",
     )
     parser.add_argument(
         "--output-dir", default="output-results",
-        help="Output directory"
+        help="Output directory",
     )
     parser.add_argument(
         "--verbose", type=int, default=0,
-        help="Keras verbose level for fit and predict"
+        help="Keras verbose level for fit and predict",
     )
     # fmt: on
     args = parser.parse_args()

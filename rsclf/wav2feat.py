@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding=utf-8
 
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
@@ -49,17 +48,17 @@ class WAV2featExtractor:
                 "stdFloor": 1e-3,
             }  # Floor on standard deviation
             param["windowLengthSamples"] = int(
-                param["windowLength"] * param["fs"] / 1000.0
+                param["windowLength"] * param["fs"] / 1000.0,
             )
             param["windowShiftSamples"] = int(
-                param["windowShift"] * param["fs"] / 1000.0
+                param["windowShift"] * param["fs"] / 1000.0,
             )
 
         self.param = param
 
         self.wll = open(self.wavLabListFile)
         self.numFeats, self.numUtterances, self.numLabels = self.checkList(
-            self.wavLabListFile
+            self.wavLabListFile,
         )
 
         self.inputFeatDim = self.param["windowLengthSamples"]
@@ -79,14 +78,13 @@ class WAV2featExtractor:
 
     def extract(self, wavepath):
         """Feature extraction routine"""
-
         # Read data and labels
         fs, data = wav.read(wavepath)
 
         # Append zeros to data if necessary (we add dither later)
         if len(data) < self.param["windowLengthSamples"]:
             data = numpy.concatenate(
-                [data, numpy.zeros(self.param["windowLengthSamples"] - len(data))]
+                [data, numpy.zeros(self.param["windowLengthSamples"] - len(data))],
             )
 
         # Determine the number of frames, each of windowshift length
@@ -107,13 +105,10 @@ class WAV2featExtractor:
         feat += numpy.random.randn(numFeats, self.param["windowLengthSamples"])
 
         # Mean normalise feature matrix
-        feat = (feat.T - feat.mean(axis=-1)).T
-
-        return feat
+        return (feat.T - feat.mean(axis=-1)).T
 
     def checkList(self, wavLabListFile):
         """Check files in list and return attributes"""
-
         print(f"Checking files in {wavLabListFile}")
         labels = set()
         numFeats = 0
@@ -150,7 +145,6 @@ class WAV2featExtractor:
 
     def prepareFeatDir(self):
         """Prepare feature directory for training/testing"""
-
         # Create output directory
         os.makedirs(self.featDir, exist_ok=False)
         self.numSplit = -(-self.numUtterances // self.maxSplitDataSize)
@@ -176,7 +170,6 @@ class WAV2featExtractor:
 
     def processUtterance(self, wl):
         """Process (return) feature and label for one utterance"""
-
         if not wl:
             return None, None
         w, label = wl.split()
@@ -186,7 +179,6 @@ class WAV2featExtractor:
 
     def saveNextSplitData(self):
         """Save a split"""
-
         lines = [self.wll.readline() for n in range(self.maxSplitDataSize)]
         featLabList = [self.processUtterance(wl) for wl in lines if wl]
 
@@ -222,25 +214,31 @@ def main():
     # fmt: off
     parser.add_argument(
         "--root", default=None,
-        help="Prefix to add in front of path names if provided. (e.g. root=/ssd/dataset/IEMOCAP)"
+        help=(
+            "Prefix to add in front of path names if provided. "
+            "(e.g. root=/ssd/dataset/IEMOCAP)"
+        ),
     )
     parser.add_argument(
         "--wav-list-file", required=True,
-        help="Path to file containing on each row '/path/to/file.wav <label>'"
+        help="Path to file containing on each row '/path/to/file.wav <label>'",
     )
     parser.add_argument(
         "--mode", required=True, choices=["train", "test"],
-        help="Type of data"
+        help="Type of data",
     )
     parser.add_argument(
         "--feature-dir", default="output-features",
-        help="Path where to save the features"
+        help="Path where to save the features",
     )
     # fmt: on
     args = parser.parse_args()
 
     w2f = WAV2featExtractor(
-        args.wav_list_file, featDir=args.feature_dir, mode=args.mode, root=args.root
+        args.wav_list_file,
+        featDir=args.feature_dir,
+        mode=args.mode,
+        root=args.root,
     )
     w2f.prepareFeatDir()
 
