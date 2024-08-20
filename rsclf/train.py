@@ -7,7 +7,7 @@
 # SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
 # SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-only
 
 import argparse
 

@@ -9,7 +9,7 @@
 # SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
 # SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-only
 
 # bash ${0} -C ~/miniconda3 -n rsclf-torch -D /path/to/dir -R /path/to/dataset
 
