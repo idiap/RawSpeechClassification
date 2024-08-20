@@ -2,15 +2,14 @@
 
 # The "main script" of RawSpeechClassification.
 
-# SPDX-FileCopyrightText: Copyright (c) 2018-2024 Idiap Research Institute <https://www.idiap.ch>
 # SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
+# SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
+# SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
+# SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
+# SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
+#
 # SPDX-License-Identifier: GPL-3.0-or-later
-
-# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-# and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
-# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
 
 # bash ${0} -C ~/miniconda3 -n rsclf-torch -D /path/to/dir -R /path/to/dataset
 
