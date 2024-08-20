@@ -29,6 +29,12 @@ To install Keras 3 with TensorFlow backend, run:
 conda env create -f conda/rsclf-tensorflow.yaml
 ```
 
+Then install the package in that environment with:
+
+```bash
+conda run -n rsclf pip install .
+```
+
 ### With pip
 
 If you want to install this package from pypi, you can run the following:
@@ -37,8 +43,9 @@ If you want to install this package from pypi, you can run the following:
 pip install raw-speech-classification
 ```
 
-By default it install with pytorch, but you can install tensorflow. You'll need to set
-the `KERAS_BACKEND` environment variable to the correct backend:
+By default it installs with pytorch, but you can install tensorflow if you want to use
+it instead. You'll need to set the `KERAS_BACKEND` environment variable to the correct
+backend:
 
 ```bash
 export KERAS_BACKEND=torch
@@ -58,8 +65,8 @@ export KERAS_BACKEND=torch
    my_dataset/file2.wav 0
    ```
 
-1. **If you installed with Conda:** Configure and run [`run.sh`](run.sh). Provide model
-   architecture as an argument. See
+1. **If you installed with Conda:** Configure and run [`run.sh`](run.sh). Provide the
+   model architecture as an argument. See
    [`model_architecture.py`](rsclf/model_architecture.py) for valid options. Optionally,
    provide an integer as a count of the number of times the experiment is repeated. This
    is useful when the same experiment needs to be repeated multiple times with different

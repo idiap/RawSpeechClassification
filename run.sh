@@ -51,8 +51,6 @@ shift $(( OPTIND - 1 ))
 eval "$(${CONDA_HOME}/bin/conda shell.bash hook)"
 conda activate ${CONDA_ENV}
 
-pip install . --upgrade -q
-
 if [[ `conda list | grep torch` ]] ; then
   echo "Using torch backend"
   export KERAS_BACKEND=torch
