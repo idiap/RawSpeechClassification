@@ -94,5 +94,12 @@ test_feat=${OUTPUT}/test_feat
 [ -s $exp/scores.txt ] || rsclf-test --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --splice-size $spliceSize --verbose 0
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
 
+# Plot results
+[ -s $exp/log.dat ] && rsclf-plot --output-dir ${OUTPUT} ${exp}
+[ ! -s $OUTPUT/plot.png ] && echo "Plotting failed." && exit 1
+
+echo "Plot saved at ${OUTPUT}/plot.png"
+echo
+
 echo "Script took $(date -u -d @${SECONDS} +"%T")"
 echo "End at $(date +'%F %T')"

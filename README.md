@@ -80,6 +80,7 @@ export KERAS_BACKEND=torch
    rsclf-wav2feat --wav-list-file list_files/test.list --feature-dir output/test_feat --mode test --root path/to/dataset/basedir
    KERAS_BACKEND=torch rsclf-train --train-feature-dir output/train_feat --validation-feature-dir output/cv_feat --output-dir output/cnn_subseg --arch subseg --splice-size 25 --verbose 2
    KERAS_BACKEND=torch rsclf-test --feature-dir output/test_feat --model-filename output/cnn_subseg/cnn.keras --output-dir output/cnn_subseg --splice-size 25 --verbose 0
+   rsclf-plot --output-dir output/ output/cnn_subseg
    ```
 
 This is an example of how to run on the IEMOCAP dataset using conda assuming conda is
