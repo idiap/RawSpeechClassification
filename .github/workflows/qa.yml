@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: qa
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  pre-commit:
+    name: Run pre commit on all modified files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
