@@ -8,6 +8,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Provide a command line interface for testing a model's performance on a dataset."""
+
 import argparse
 
 from pathlib import Path
@@ -19,6 +21,7 @@ from .rawdataset import RawDataset
 
 
 def test(test_dir, model, output_dir, splice_size=25, verbose=0):
+    """Score each feature and compute the accuracy of the model."""
     Path(output_dir).mkdir(exist_ok=True, parents=True)
 
     r = RawDataset(test_dir, splice_size=splice_size, mode="test")
@@ -66,16 +69,22 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Test the model")
+    """Test the trained model on a test set.
+
+    Set the KERAS_BACKEND environment variable to torch or tensorflow.
+    """
+    parser = argparse.ArgumentParser(
+        prog="rsclf-test",
+        description=main.__doc__,
+    )
     # fmt: off
     parser.add_argument(
         "--feature-dir", required=True,
         help="Path to the directory containing the features",
     )
     parser.add_argument(
-        "--model-filename", required=True,
-        help="Path to the .keras model",
-    )
+        "--model-filename", required=True, help="Path to the .keras model",
+        )
     parser.add_argument(
         "--output-dir", default="output-results",
         help="Output directory",

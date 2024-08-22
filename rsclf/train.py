@@ -9,6 +9,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Provide a command line interface for training a model."""
+
 import argparse
 
 from pathlib import Path
@@ -121,7 +123,11 @@ def train(args):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train and validate the model")
+    """Train and validate the model.
+
+    Set the KERAS_BACKEND environment variable to torch or tensorflow.
+    """
+    parser = argparse.ArgumentParser(prog="rsclf-train", description=main.__doc__)
     # fmt: off
     parser.add_argument(
         "--train-feature-dir", required=True,

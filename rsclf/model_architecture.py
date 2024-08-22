@@ -6,6 +6,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Define the model architecture for keras."""
+
 import keras
 
 

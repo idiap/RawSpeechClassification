@@ -7,6 +7,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Provide an interface to load files from a dataset."""
+
 import pickle
 
 from pathlib import Path
@@ -17,6 +19,8 @@ import numpy as np
 
 
 class RawDataset(keras.utils.PyDataset):
+    """Keras dataset to provide samples from a dataset."""
+
     def __init__(self, featDir, batchSize=256, spliceSize=25, mode="train", **kwargs):
         kwargs = {"workers": 1}
         super().__init__(**kwargs)
@@ -51,7 +55,7 @@ class RawDataset(keras.utils.PyDataset):
         self.doUpdateSplit = True
 
     def addContextNorm(self, feat):
-        # Add context to get the window size
+        """Add context to get the window size."""
         N = len(feat)
 
         # Repeat feat[0], feat[-1] so that we get the same number of spliced feats
@@ -74,10 +78,12 @@ class RawDataset(keras.utils.PyDataset):
         return ((feat.T - feat.mean(axis=-1)) / std).T
 
     def __len__(self):
+        """Return the number of steps."""
         return self.numSteps
 
     # Retrieve a mini batch
     def __getitem__(self, idx):
+        """Return a batch at a specific index."""
         self.numDone += 1
         if self.mode == "train":
             while self.batchPointer + self.batchSize >= len(self.x):

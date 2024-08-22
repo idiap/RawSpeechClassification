@@ -4,6 +4,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Provide a command line interface for plotting results of an experiment."""
+
 import argparse
 
 from pathlib import Path
@@ -27,8 +29,11 @@ def prepare_figure():
 
 
 def main():
-    """Create plots showing the performance of the classification for each epoch."""
-    parser = argparse.ArgumentParser()
+    """Create plots showing the performance of the classification for each epoch.
+
+    Each given directory must contain a log.dat file and an accuracy.dat file.
+    """
+    parser = argparse.ArgumentParser(prog="rsclf-plot", description=main.__doc__)
     parser.add_argument(
         "--output-dir",
         default=".",

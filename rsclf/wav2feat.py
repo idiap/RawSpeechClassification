@@ -8,6 +8,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+"""Provide a command line interface for extracting features from raw audio files."""
+
 import argparse
 import os
 import pickle
@@ -21,15 +23,16 @@ import scipy.io.wavfile as wav
 
 
 class WAV2featExtractor:
-    """Extractor from wav files to features
+    """Extractor from wav files to features.
 
     Args:
 
-      wavLabListFile (str):
+      wavLabListFile (str): Path to the file containing the list of wav files and labels
       featDir (str): Output directory where to save the features
-      param:
+      param (dict or None): Dictionary containing the parameters for the feature
+        extraction
       mode (str): Mode of the data 'train' or 'test'
-      root (str): Prefix to append to the path
+      root (str): Prefix to append to the path of each file in wavLabListFile
 
     """
 
@@ -65,9 +68,11 @@ class WAV2featExtractor:
         self.outputFeatDim = 1 if self.numLabels == 2 else self.numLabels
 
     def __exit__(self):
+        """Clean up."""
         self.wll.close()
 
     def add_root(self, filename):
+        """Prepend the root path to a filename."""
         if self.root:
             filename = str(Path(self.root) / filename)
 
@@ -77,7 +82,7 @@ class WAV2featExtractor:
         return str(filename)
 
     def extract(self, wavepath):
-        """Feature extraction routine"""
+        """Feature extraction routine."""
         # Read data and labels
         fs, data = wav.read(wavepath)
 
@@ -108,7 +113,7 @@ class WAV2featExtractor:
         return (feat.T - feat.mean(axis=-1)).T
 
     def checkList(self, wavLabListFile):
-        """Check files in list and return attributes"""
+        """Check files in list and return attributes."""
         print(f"Checking files in {wavLabListFile}")
         labels = set()
         numFeats = 0
@@ -122,12 +127,12 @@ class WAV2featExtractor:
                 if f.getnchannels() != 1:
                     raise ValueError(
                         f"ERROR: {w} has multiple channels ({f.getnchannels()}). "
-                        "Modify the code accordingly and re-run."
+                        "Modify the code accordingly and re-run.",
                     )
                 if f.getframerate() != self.param["fs"]:
                     raise ValueError(
                         f"ERROR: Sampling frequency mismatch with {w}: "
-                        f"expected {self.param['fs']}, got {f.getframerate()}"
+                        f"expected {self.param['fs']}, got {f.getframerate()}",
                     )
                 N = f.getnframes()
 
@@ -144,7 +149,7 @@ class WAV2featExtractor:
         return numFeats, numUtterances, numLabels
 
     def prepareFeatDir(self):
-        """Prepare feature directory for training/testing"""
+        """Prepare feature directory for training/testing."""
         # Create output directory
         os.makedirs(self.featDir, exist_ok=False)
         self.numSplit = -(-self.numUtterances // self.maxSplitDataSize)
@@ -169,7 +174,7 @@ class WAV2featExtractor:
         self.wll.seek(0)  # For future use
 
     def processUtterance(self, wl):
-        """Process (return) feature and label for one utterance"""
+        """Process (return) feature and label for one utterance."""
         if not wl:
             return None, None
         w, label = wl.split()
@@ -178,7 +183,7 @@ class WAV2featExtractor:
         return w, feat, int(label) * numpy.ones(len(feat), dtype=numpy.int32)
 
     def saveNextSplitData(self):
-        """Save a split"""
+        """Save a split."""
         lines = [self.wll.readline() for n in range(self.maxSplitDataSize)]
         featLabList = [self.processUtterance(wl) for wl in lines if wl]
 
@@ -204,13 +209,14 @@ class WAV2featExtractor:
                     pickle.dump(ufl, f)
 
     def __iter__(self):
-        """Make the object iterable and retrieve one utterance each time"""
+        """Make the object iterable and retrieve one utterance each time."""
         for wl in self.wll:
             yield self.processUtterance(wl)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Prepare the features")
+    """Extract the features for each raw audio files in a list and save them."""
+    parser = argparse.ArgumentParser(prog="rsclf-wav2feat", description=main.__doc__)
     # fmt: off
     parser.add_argument(
         "--root", default=None,
