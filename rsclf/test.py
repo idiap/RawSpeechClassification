@@ -5,6 +5,7 @@
 # SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
 # SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
 # SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
@@ -53,7 +54,7 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
             spk_counts[spk] += len(pred)
 
     nb_correct = 0
-    with open(Path(output_dir) / "scores.txt", "w") as f:
+    with (Path(output_dir) / "scores.txt").open("w") as f:
         for spk in spk_labels:
             label = spk_labels[spk]
             posterior = spk_scores[spk] / spk_counts[spk]
@@ -63,7 +64,7 @@ def test(test_dir, model, output_dir, splice_size=25, verbose=0):
                 nb_correct += 1
 
     accuracy = nb_correct / len(spk_labels)
-    with open(Path(output_dir) / "accuracy.dat", "w") as f:
+    with (Path(output_dir) / "accuracy.dat").open("w") as f:
         print("accuracy", file=f)
         print(accuracy, file=f)
 

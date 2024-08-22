@@ -5,13 +5,13 @@
 # SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
 # SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
 # SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 """Provide a command line interface for extracting features from raw audio files."""
 
 import argparse
-import os
 import pickle
 import wave
 
@@ -37,8 +37,8 @@ class WAV2featExtractor:
     """
 
     def __init__(self, wavLabListFile, featDir=None, param=None, mode="train", root=""):
-        self.wavLabListFile = wavLabListFile
-        self.featDir = featDir
+        self.wavLabListFile = Path(wavLabListFile)
+        self.featDir = Path(featDir)
         self.mode = mode
         self.maxSplitDataSize = 100  # Utterances
         self.root = root
@@ -59,7 +59,7 @@ class WAV2featExtractor:
 
         self.param = param
 
-        self.wll = open(self.wavLabListFile)
+        self.wll = self.wavLabListFile.open()
         self.numFeats, self.numUtterances, self.numLabels = self.checkList(
             self.wavLabListFile,
         )
@@ -112,7 +112,7 @@ class WAV2featExtractor:
         # Mean normalise feature matrix
         return (feat.T - feat.mean(axis=-1)).T
 
-    def checkList(self, wavLabListFile):
+    def checkList(self, wavLabListFile: Path):
         """Check files in list and return attributes."""
         print(f"Checking files in {wavLabListFile}")
         labels = set()
@@ -151,7 +151,7 @@ class WAV2featExtractor:
     def prepareFeatDir(self):
         """Prepare feature directory for training/testing."""
         # Create output directory
-        os.makedirs(self.featDir, exist_ok=False)
+        self.featDir.mkdir(parents=True, exist_ok=False)
         self.numSplit = -(-self.numUtterances // self.maxSplitDataSize)
 
         # Save info
@@ -164,7 +164,7 @@ class WAV2featExtractor:
             "outputFeatDim": self.outputFeatDim,
         }
         print(self.info)
-        infoFile = f"{self.featDir}/info.npy"
+        infoFile = self.featDir / "info.npy"
         numpy.save(infoFile, self.info)
 
         # In case the object is used as iterator before calling this routine
@@ -189,8 +189,8 @@ class WAV2featExtractor:
 
         if self.mode == "train":
             uttList, featList, labelList = map(list, zip(*featLabList))
-            featFile = f"{self.featDir}/{self.splitDataCounter}.x.h5"
-            labelFile = f"{self.featDir}/{self.splitDataCounter}.y.h5"
+            featFile = self.featDir / f"{self.splitDataCounter}.x.h5"
+            labelFile = self.featDir / f"{self.splitDataCounter}.y.h5"
 
             # Save features
             with h5py.File(featFile, "w") as f:
@@ -203,8 +203,8 @@ class WAV2featExtractor:
                     f.create_dataset(str(i), data=labels, dtype="int32")
 
         else:
-            featFile = f"{self.featDir}/{self.splitDataCounter}.pickle"
-            with open(featFile, "wb") as f:
+            featFile = self.featDir / f"{self.splitDataCounter}.pickle"
+            with featFile.open("wb") as f:
                 for ufl in featLabList:
                     pickle.dump(ufl, f)
 

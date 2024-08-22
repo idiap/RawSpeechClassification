@@ -4,6 +4,7 @@
 # SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
 # SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
 # SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
@@ -24,7 +25,7 @@ class RawDataset(keras.utils.PyDataset):
     def __init__(self, featDir, batchSize=256, spliceSize=25, mode="train", **kwargs):
         kwargs = {"workers": 1}
         super().__init__(**kwargs)
-        self.featDir = featDir
+        self.featDir = Path(featDir)
         self.batchSize = batchSize
         self.spliceSize = spliceSize
         self.mode = mode
@@ -93,8 +94,8 @@ class RawDataset(keras.utils.PyDataset):
 
                 self.splitDataCounter += 1
 
-                featFile = f"{self.featDir}/{self.splitDataCounter}.x.h5"
-                labelFile = f"{self.featDir}/{self.splitDataCounter}.y.h5"
+                featFile = self.featDir / f"{self.splitDataCounter}.x.h5"
+                labelFile = self.featDir / f"{self.splitDataCounter}.y.h5"
 
                 with h5py.File(featFile, "r") as f:
                     featList = [self.addContextNorm(f[i][()]) for i in f]
@@ -127,8 +128,8 @@ class RawDataset(keras.utils.PyDataset):
             while True:
                 if self.doUpdateSplit:
                     self.splitDataCounter += 1
-                    uflFile = f"{self.featDir}/{self.splitDataCounter}.pickle"
-                    self.f = open(uflFile, "rb")
+                    uflFile = self.featDir / f"{self.splitDataCounter}.pickle"
+                    self.f = uflFile.open("rb")
                     self.doUpdateSplit = False
                 try:
                     utt, feat, lab = pickle.load(self.f)
