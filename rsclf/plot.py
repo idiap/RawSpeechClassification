@@ -48,9 +48,11 @@ def main():
 
     for dirname in args.dirnames:
         log_path = Path(dirname) / "log.dat"
-        assert Path(log_path).is_file(), f"Expect file {log_path}"
+        if not Path(log_path).is_file():
+            raise FileNotFoundError(f"Expect file {log_path}")
         acc_path = Path(dirname) / "accuracy.dat"
-        assert Path(acc_path).is_file(), f"Expect file {acc_path}"
+        if not Path(acc_path).is_file():
+            raise FileNotFoundError(f"Expect file {acc_path}")
 
         logs = pl.read_csv(log_path, has_header=True, separator=" ")
         axs[0, 0].plot(logs["loss"])

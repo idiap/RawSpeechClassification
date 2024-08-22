@@ -119,16 +119,16 @@ class WAV2featExtractor:
 
             with wave.open(w) as f:
                 # Check number of channels and sampling rate
-                msg = (
-                    f"ERROR: {w} has multiple channels. "
-                    f"Modify the code accordingly and re-run"
-                )
-                assert f.getnchannels() == 1, msg
-                msg = (
-                    f"ERROR: Sampling frequency mismatch with {w}: "
-                    f"expected {self.param['fs']}, got {f.getframerate()}"
-                )
-                assert f.getframerate() == self.param["fs"], msg
+                if f.getnchannels() != 1:
+                    raise ValueError(
+                        f"ERROR: {w} has multiple channels ({f.getnchannels()}). "
+                        "Modify the code accordingly and re-run."
+                    )
+                if f.getframerate() != self.param["fs"]:
+                    raise ValueError(
+                        f"ERROR: Sampling frequency mismatch with {w}: "
+                        f"expected {self.param['fs']}, got {f.getframerate()}"
+                    )
                 N = f.getnframes()
 
             numFeats += max(
