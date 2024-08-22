@@ -37,7 +37,7 @@ def main():
     parser.add_argument("--extension", default="png", help="Image extension to save")
     parser.add_argument(
         "dirnames",
-        nargs=argparse.REMAINDER,
+        nargs="+",
         help="Location of the Keras trained model",
     )
     args = parser.parse_args()
