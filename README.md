@@ -37,16 +37,21 @@ conda run -n rsclf pip install .
 ### Installing from PyPI
 
 If you want to install the last release of this package in your current environment, you
-can run the following:
+can run either of the following commands depending on your desired framework:
 
 ```bash
-pip install raw-speech-classification
+pip install raw-speech-classification[torch]
 ```
 
-By default it installs with pytorch, but you can install tensorflow if you want to use
-it instead. You'll need to set the `KERAS_BACKEND` environment variable to the correct
-backend before running `rsclf-train` or `rsclf-test` (see below), or globally for the
-current bash session with:
+or
+
+```bash
+pip install raw-speech-classification[tensorflow]
+```
+
+You'll also need to set the `KERAS_BACKEND` environment variable to the correct backend
+before running `rsclf-train` or `rsclf-test` (see below), or globally for the current
+bash session with:
 
 ```bash
 export KERAS_BACKEND=torch
@@ -59,9 +64,9 @@ Replace `torch` by `tensorflow` accordingly.
 1. Create lists for training, cross-validation and testing.
    Each line in a list must contain the path to a wav file (relative to the `-R` or
    `--root` option), followed by its integer label indexed from 0, separated by a space.
-   E.g if your data files are in `/home/bob/data/my_dataset/part*/file*.wav`, the `root`
-   option could be `/home/bob/data/my_dataset` and the content of the files would then
-   be like:
+   E.g. if your data files are in `/home/bob/data/my_dataset/part*/file*.wav`, the
+   `root` option could be `/home/bob/data/my_dataset` and the content of the files would
+   then be like:
 
    ```txt
    part1/file1.wav 1
@@ -72,12 +77,11 @@ Replace `torch` by `tensorflow` accordingly.
    [`datasets/IEMOCAP/F1_lists`](datasets/IEMOCAP/F1_lists).
 
 1. **If you installed from source with Conda:** A `run` script is available that
-   concatenates all the steps. run [`run.sh`](run.sh). Provide the model architecture as
+   concatenates all the steps. Run [`run.sh`](run.sh). Provide the model architecture as
    an argument. See [`model_architecture.py`](rsclf/model_architecture.py) for valid
    options. Optionally, provide an integer as a count of the number of times the
    experiment is repeated. This is useful when the same experiment needs to be repeated
-   multiple times with different initializations. The argument defaults to 1.
-   get more info with
+   multiple times with different initialization. The argument defaults to 1.
 
    **If you installed with pip:** You can run the following commands (give the `--help`
    option to each command for more details):
@@ -91,7 +95,7 @@ Replace `torch` by `tensorflow` accordingly.
    rsclf-plot --output-dir output/ output/cnn_subseg
    ```
 
-This is an example of how to run on the IEMOCAP dataset using conda assuming conda is
+This is an example of how to run on the IEMOCAP dataset using conda, assuming conda is
 installed in `~/miniconda3` and your environment is `rsclf`:
 
 ```bash
@@ -101,7 +105,7 @@ bash run.sh -C ~/miniconda3 -n rsclf -D ./datasets/IEMOCAP/F1_lists -a seg -o re
 For instance, `<IEMOCAP_ROOT>` can be `/ssd/data/IEMOCAP` which should
 contain `IEMOCAP_full_release/Session*`.
 
-This is an [example](./docs/log.txt) of the log printed to the terminal and you should
+This is an [example](./docs/log.txt) of the log printed to the terminal, and you should
 obtain the following curve in `results/seg-f1/plot.png`:
 
 ![Results](./docs/plot.png)

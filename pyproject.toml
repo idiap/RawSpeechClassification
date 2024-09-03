@@ -23,9 +23,6 @@ description = "Trains CNN classifiers from raw speech using Keras and tests them
 requires-python = ">=3.11"
 dependencies = [
     "keras==3.4.1",
-    "torch",
-    "torchvision",
-    "torchaudio",
     "numpy",
     "h5py",
     "scipy",
@@ -45,6 +42,14 @@ classifiers = [
 Source = "https://github.com/idiap/RawSpeechClassification"
 
 [project.optional-dependencies]
+torch = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+]
+tensorflow = [
+    "tensorflow[and-cuda]",
+]
 dev = [
     "pre-commit",
 ]
