@@ -138,7 +138,7 @@ def main():
         help="Path to the directory containing the features for validation",
     )
     parser.add_argument(
-        "--arch", default="seg",
+        "--arch", choices=["seg", "subseg"], default="seg",
         help="Model architecture name",
     )
     parser.add_argument(
