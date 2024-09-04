@@ -43,12 +43,12 @@ Source = "https://github.com/idiap/RawSpeechClassification"
 
 [project.optional-dependencies]
 torch = [
-    "torch",
+    "torch~=2.0",
     "torchvision",
     "torchaudio",
 ]
 tensorflow = [
-    "tensorflow[and-cuda]",
+    "tensorflow[and-cuda]~=2.16.1",
 ]
 dev = [
     "pre-commit",
