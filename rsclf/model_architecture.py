@@ -1,29 +1,18 @@
-# coding=utf-8
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
+# SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
+# SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-only
 
-# Copyright (c) 2018-2024 Idiap Research Institute <https://www.idiap.ch>
-# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
-#
-# This file is part of RawSpeechClassification.
-#
-# RawSpeechClassification is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 3 as
-# published by the Free Software Foundation.
-#
-# RawSpeechClassification is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
-
+"""Define the model architecture for keras."""
 
 import keras
 
 
 def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
+    """Define the speech classification model."""
     if arch == "subseg":
         m = keras.models.Sequential(
             [
@@ -43,7 +32,7 @@ def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
                 keras.layers.GlobalAveragePooling1D(),
                 keras.layers.Dense(10),
                 keras.layers.Activation("relu"),
-            ]
+            ],
         )
 
     elif arch == "seg":
@@ -64,7 +53,7 @@ def model_architecture(arch, inputFeatDim=4000, outputFeatDim=1):
                 keras.layers.GlobalAveragePooling1D(),
                 keras.layers.Dense(10),
                 keras.layers.Activation("relu"),
-            ]
+            ],
         )
 
     else:

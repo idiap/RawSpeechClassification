@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: RawSpeechClassification
+Upstream-Contact: Yannick Dayer <yannick.dayer@idiap.ch>
+Source: https://github.com/idiap/RawSpeechClassification
+
+Files: datasets/IEMOCAP/F1_lists/*.list
+Copyright: Copyright © Idiap Research Institute <contact@idiap.ch>
+License: GPL-3.0-only
+
+Files: docs/log.txt
+Copyright: Copyright © Idiap Research Institute <contact@idiap.ch>
+License: GPL-3.0-only
+
+Files: docs/plot.png
+Copyright: Copyright © Idiap Research Institute <contact@idiap.ch>
+License: GPL-3.0-only

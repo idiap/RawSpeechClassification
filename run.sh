@@ -2,26 +2,14 @@
 
 # The "main script" of RawSpeechClassification.
 
-# Copyright (c) 2018-2024 Idiap Research Institute <https://www.idiap.ch>
-# Written by S. Pavankumar Dubagunta <pavankumar [dot] dubagunta [at] idiap [dot] ch>
-# and Mathew Magimai Doss <mathew [at] idiap [dot] ch>
-# and Olivier Bornet <olivier [dot] bornet [at] idiap [dot] ch>
-# and Olivier Canévet <olivier [dot] canevet [at] idiap [dot] ch>
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 #
-# This file is part of RawSpeechClassification.
+# SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
+# SPDX-FileContributor: Mathew Magimai Doss <mathew@idiap.ch>
+# SPDX-FileContributor: Olivier Bornet <olivier.bornet@idiap.ch>
+# SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
 #
-# RawSpeechClassification is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 3 as
-# published by the Free Software Foundation.
-#
-# RawSpeechClassification is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with RawSpeechClassification. If not, see <http://www.gnu.org/licenses/>.
-
+# SPDX-License-Identifier: GPL-3.0-only
 
 # bash ${0} -C ~/miniconda3 -n rsclf-torch -D /path/to/dir -R /path/to/dataset
 
@@ -94,17 +82,24 @@ cv_feat=${OUTPUT}/cv_feat
 test_feat=${OUTPUT}/test_feat
 
 # Extract features
-[ -d $cv_feat ] || python3 rsclf/wav2feat.py --wav-list-file $cv_list --feature-dir $cv_feat --mode "train" --root "${ROOT}"
-[ -d $train_feat ] || python3 rsclf/wav2feat.py --wav-list-file $train_list --feature-dir $train_feat --mode "train" --root "${ROOT}"
-[ -d $test_feat ] || python3 rsclf/wav2feat.py --wav-list-file $test_list --feature-dir $test_feat --mode "test" --root "${ROOT}"
+[ -d $cv_feat ] || rsclf-wav2feat --wav-list-file $cv_list --feature-dir $cv_feat --mode "train" --root "${ROOT}"
+[ -d $train_feat ] || rsclf-wav2feat --wav-list-file $train_list --feature-dir $train_feat --mode "train" --root "${ROOT}"
+[ -d $test_feat ] || rsclf-wav2feat --wav-list-file $test_list --feature-dir $test_feat --mode "test" --root "${ROOT}"
 
 # Train
-[ -f $exp/cnn.keras ] || python3 rsclf/train.py --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --splice-size $spliceSize --verbose 2
+[ -f $exp/cnn.keras ] || rsclf-train --train-feature-dir $train_feat --validation-feature-dir $cv_feat --output-dir $exp --arch $arch --splice-size $spliceSize --verbose 2
 [ ! -f $exp/cnn.keras ] && echo "Training failed. Check logs." && exit 1
 
 # Test
-[ -s $exp/scores.txt ] || python3 rsclf/test.py --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --splice-size $spliceSize --verbose 0
+[ -s $exp/scores.txt ] || rsclf-test --feature-dir $test_feat --model-filename $exp/cnn.keras --output-dir $exp --splice-size $spliceSize --verbose 0
 [ ! -s $exp/scores.txt ] && echo "Testing failed. Check logs." && exit 1
+
+# Plot results
+[ -s $exp/log.dat ] && rsclf-plot --output-dir ${OUTPUT} ${exp}
+[ ! -s $OUTPUT/plot.png ] && echo "Plotting failed." && exit 1
+
+echo "Plot saved at ${OUTPUT}/plot.png"
+echo
 
 echo "Script took $(date -u -d @${SECONDS} +"%T")"
 echo "End at $(date +'%F %T')"

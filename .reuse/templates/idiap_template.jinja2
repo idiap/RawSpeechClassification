@@ -1,0 +1,13 @@
+{% for copyright_line in copyright_lines %}
+SPDX-FileCopyrightText: {{ copyright_line }}
+{% endfor %}
+
+{% for contributor_line in contributor_lines %}
+SPDX-FileContributor: {{ contributor_line }}
+{% endfor %}
+{% if contributor_lines %}
+
+{% endif %}
+{% for expression in spdx_expressions %}
+SPDX-License-Identifier: {{ expression }}
+{% endfor %}

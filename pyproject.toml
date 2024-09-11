@@ -1,0 +1,107 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "raw-speech-classification"
+version = "1.0.0"
+license = {file = "COPYING"}
+authors = [
+    { name = "S. Pavankumar Dubagunta" },
+    { name = "Dr. Mathew Magimai-Doss" },
+]
+maintainers = [
+    { name = "Olivier Canévet", email="olivier.canevet@idiap.ch" },
+    { name = "Philip Abbet", email = "philip.abbet@idiap.ch" },
+    { name = "Yannick Dayer", email = "yannick.dayer@idiap.ch" },
+]
+description = "Trains CNN classifiers from raw speech using Keras and tests them."
+requires-python = ">=3.11"
+dependencies = [
+    "keras",
+    "numpy",
+    "h5py",
+    "scipy",
+    "matplotlib",
+    "polars",
+]
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+    "Natural Language :: English",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Science/Research",
+]
+
+[project.urls]
+Source = "https://github.com/idiap/RawSpeechClassification"
+
+[project.optional-dependencies]
+torch = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+]
+tensorflow = [
+    "tensorflow[and-cuda]",
+]
+dev = [
+    "pre-commit",
+]
+
+[project.scripts]
+rsclf-train = "rsclf.train:main"
+rsclf-test = "rsclf.test:main"
+rsclf-wav2feat = "rsclf.wav2feat:main"
+rsclf-plot = "rsclf.plot:main"
+
+[tool.flit.module]
+name = "rsclf"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "A",   # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
+    "COM", # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+    "D",   # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+    "E",   # https://docs.astral.sh/ruff/rules/#error-e
+    "F",   # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "I",   # https://docs.astral.sh/ruff/rules/#isort-i
+    "ISC", # https://docs.astral.sh/ruff/rules/#flake8-implicit-str-concat-isc
+    "LOG", # https://docs.astral.sh/ruff/rules/#flake8-logging-log
+    # "N",   # https://docs.astral.sh/ruff/rules/#pep8-naming-n
+    "PTH", # https://docs.astral.sh/ruff/rules/#flake8-use-pathlib-pth
+    "Q",   # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+    "RET", # https://docs.astral.sh/ruff/rules/#flake8-return-ret
+    "SLF", # https://docs.astral.sh/ruff/rules/#flake8-self-slf
+    "T10", # https://docs.astral.sh/ruff/rules/#flake8-debugger-t10
+    "UP",  # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "W",   # https://docs.astral.sh/ruff/rules/#warning-w
+    "G",   # https://docs.astral.sh/ruff/rules/#flake8-logging-format-g
+    # "ICN", # https://docs.astral.sh/ruff/rules/#flake8-import-conventions-icn
+]
+ignore = [
+    "ISC001", # https://docs.astral.sh/ruff/rules/single-line-implicit-string-concatenation/
+]
+
+[tool.ruff.lint.isort]
+# Use a single line between direct and from import.
+lines-between-types = 1
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["D", "E501"]
+"doc/conf.py" = ["D"]
