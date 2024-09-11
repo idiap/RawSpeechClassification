@@ -8,8 +8,8 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "raw-speech-classification"
-version = "1.0.0"
-license = {file = "COPYING"}
+version = "1.0.1"
+license = {file = "LICENSES/GPL-3.0-only.txt"}
 authors = [
     { name = "S. Pavankumar Dubagunta" },
     { name = "Dr. Mathew Magimai-Doss" },

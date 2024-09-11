@@ -1,0 +1,42 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+# SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-packaging:
+    name: Package the project into a distributable file
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install build dependencies
+        run: |
+          pip install --upgrade pip
+          pip install build
+      - name: Package the project to the dist dir
+        run: python -m build
+      - name: Try installing from the new dists
+        run: pip install dist/*.whl
+      - name: Produce a GitHub actions artifact (the distributable package)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
