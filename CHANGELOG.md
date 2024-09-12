@@ -6,6 +6,11 @@ SPDX-License-Identifier: GPL-3.0-only
 
 # Changelog
 
+## September 2024
+
+- Add Jax backend
+- Make pip installable package on PyPi
+
 ## August 2024
 
 - Update the code for Keras 3 with PyTorch or Tensorflow backend
