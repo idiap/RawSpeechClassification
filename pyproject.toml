@@ -50,6 +50,9 @@ torch = [
 tensorflow = [
     "tensorflow[and-cuda]",
 ]
+jax = [
+    "jax[cuda12]",
+]
 dev = [
     "pre-commit",
 ]
