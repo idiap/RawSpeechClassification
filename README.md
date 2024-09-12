@@ -28,6 +28,12 @@ To install Keras 3 with TensorFlow backend, run:
 conda env create -f conda/rsclf-tensorflow.yaml
 ```
 
+To install Keras 3 with Jax backend, run:
+
+```bash
+conda env create -f conda/rsclf-jax.yaml
+```
+
 Then install the package in that environment (the default name is `rsclf`) with:
 
 ```bash
@@ -49,6 +55,12 @@ or
 pip install raw-speech-classification[tensorflow]
 ```
 
+or
+
+```bash
+pip install raw-speech-classification[jax]
+```
+
 You'll also need to set the `KERAS_BACKEND` environment variable to the correct backend
 before running `rsclf-train` or `rsclf-test` (see below), or globally for the current
 bash session with:
@@ -57,7 +69,14 @@ bash session with:
 export KERAS_BACKEND=torch
 ```
 
-Replace `torch` by `tensorflow` accordingly.
+Replace `torch` by `tensorflow` or `jax` accordingly.
+
+If you already have an environment with PyTorch, TensorFlow, or Jax
+installed, you can simply run:
+
+```bash
+pip install raw-speech-classification
+```
 
 ## Using the code
 
