@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: rsclf
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+    - keras
+    - h5py
+    - scipy
+    - jax[cuda12]
+    - matplotlib
+    - numpy
+    - polars
