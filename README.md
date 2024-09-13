@@ -6,7 +6,7 @@ SPDX-License-Identifier: GPL-3.0-only
 
 # Raw Speech Classification
 
-[![PyPI package](https://shields.io/pypi/v/raw-speech-classification.svg?logo=pypi)](https:/pypi.org/project/raw-speech-classification)
+[![PyPI package](https://shields.io/pypi/v/raw-speech-classification.svg?logo=pypi)](https://pypi.org/project/raw-speech-classification)
 
 Trains CNN (or any neural network based) classifiers from raw speech using Keras and
 tests them. The inputs are lists of wav files, where each file is labelled. It then
