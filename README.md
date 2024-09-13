@@ -87,7 +87,7 @@ Replace `torch` by `tensorflow` or `jax` accordingly.
    `root` option could be `/home/bob/data/my_dataset` and the content of the files would
    then be like:
 
-   ```txt
+   ```text
    part1/file1.wav 1
    part1/file2.wav 0
    ```
@@ -146,7 +146,7 @@ obtain the following curve in `results/seg-f1/plot.png`:
    probabilities. If you need the results per speaker, configure it accordingly (see the
    script for details). The default output format is:
 
-   ```txt
+   ```text
     <speakerID> <label> [<posterior_probability_vector>]
    ```
 
