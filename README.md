@@ -6,6 +6,8 @@ SPDX-License-Identifier: GPL-3.0-only
 
 # Raw Speech Classification
 
+[![PyPI package](https://shields.io/pypi/v/raw-speech-classification.svg?logo=pypi)](https://pypi.org/project/raw-speech-classification)
+
 Trains CNN (or any neural network based) classifiers from raw speech using Keras and
 tests them. The inputs are lists of wav files, where each file is labelled. It then
 creates fixed length signals and processes them. During testing, it computes scores at
@@ -14,7 +16,7 @@ the fixed length signals.
 
 ## Installation
 
-### From source, In a Conda environment
+### From source in a conda environment
 
 To install Keras 3 with PyTorch backend, run:
 
@@ -26,6 +28,12 @@ To install Keras 3 with TensorFlow backend, run:
 
 ```bash
 conda env create -f conda/rsclf-tensorflow.yaml
+```
+
+To install Keras 3 with Jax backend, run:
+
+```bash
+conda env create -f conda/rsclf-jax.yaml
 ```
 
 Then install the package in that environment (the default name is `rsclf`) with:
@@ -49,7 +57,20 @@ or
 pip install raw-speech-classification[tensorflow]
 ```
 
-You'll also need to set the `KERAS_BACKEND` environment variable to the correct backend
+or
+
+```bash
+pip install raw-speech-classification[jax]
+```
+
+If you already have an environment with PyTorch, TensorFlow, or Jax
+installed, you can simply run:
+
+```bash
+pip install raw-speech-classification
+```
+
+You will also need to set the `KERAS_BACKEND` environment variable to the correct backend
 before running `rsclf-train` or `rsclf-test` (see below), or globally for the current
 bash session with:
 
@@ -57,7 +78,7 @@ bash session with:
 export KERAS_BACKEND=torch
 ```
 
-Replace `torch` by `tensorflow` accordingly.
+Replace `torch` by `tensorflow` or `jax` accordingly.
 
 ## Using the code
 
@@ -68,7 +89,7 @@ Replace `torch` by `tensorflow` accordingly.
    `root` option could be `/home/bob/data/my_dataset` and the content of the files would
    then be like:
 
-   ```txt
+   ```text
    part1/file1.wav 1
    part1/file2.wav 0
    ```
@@ -127,7 +148,7 @@ obtain the following curve in `results/seg-f1/plot.png`:
    probabilities. If you need the results per speaker, configure it accordingly (see the
    script for details). The default output format is:
 
-   ```txt
+   ```text
     <speakerID> <label> [<posterior_probability_vector>]
    ```
 

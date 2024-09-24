@@ -26,6 +26,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install build
+      - name: Patch the README links to point to the correct files at the current tag
+        run: |
+          perl -i.bak -pe 's/\[(.*)\]\((?!http)\.?\/?(.*)\.([a-z]+)\)/[\1](https:\/\/raw.github.com\/idiap\/RawSpeechClassification\/${{ github.event.release.tag_name }}\/\2.\3)/g' README.md
+          perl -i.bak -pe 's/\[(.*)\]\((?!http)\.?\/?(.*)\)/[\1](https:\/\/github.com\/idiap\/RawSpeechClassification\/tree\/${{ github.event.release.tag_name }}\/\2)/g' README.md
+          rm README.md.bak
       - name: Package the project
         run: python -m build
       - name: Produce a GitHub actions artifact (the package)
