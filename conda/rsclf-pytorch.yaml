@@ -13,7 +13,7 @@ dependencies:
   - numpy
   - pip
   - pip:
-    - keras==3.4.1
+    - keras
     - h5py
     - scipy
     - matplotlib
