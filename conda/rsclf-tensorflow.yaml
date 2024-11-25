@@ -7,9 +7,9 @@ dependencies:
   - python=3.11
   - pip
   - pip:
-    - keras==3.4.1
+    - keras
     - scipy
     - --extra-index-url https://pypi.nvidia.com
-    - tensorflow[and-cuda]==2.16.2
+    - tensorflow[and-cuda]
     - matplotlib
     - polars
