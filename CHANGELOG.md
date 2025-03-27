@@ -6,6 +6,10 @@ SPDX-License-Identifier: GPL-3.0-only
 
 # Changelog
 
+## March 2025
+
+- Remove conda files
+
 ## September 2024
 
 - Add Jax backend
