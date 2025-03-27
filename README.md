@@ -16,36 +16,32 @@ the fixed length signals.
 
 ## Installation
 
-### From source in a conda environment
+### Installing from source in a virtual environment
 
-To install Keras 3 with PyTorch backend, run:
+To install the following repository from source, depending on the
+Keras backend you want to use, run:
 
 ```bash
-conda env create -f conda/rsclf-pytorch.yaml
+pip install -e .[torch]
 ```
 
-To install Keras 3 with TensorFlow backend, run:
+or
 
 ```bash
-conda env create -f conda/rsclf-tensorflow.yaml
+pip install -e .[tensorflow]
 ```
 
-To install Keras 3 with Jax backend, run:
+or
 
 ```bash
-conda env create -f conda/rsclf-jax.yaml
-```
-
-Then install the package in that environment (the default name is `rsclf`) with:
-
-```bash
-conda run -n rsclf pip install .
+pip install -e .[jax]
 ```
 
 ### Installing from PyPI
 
-If you want to install the last release of this package in your current environment, you
-can run either of the following commands depending on your desired framework:
+If you want to install the last release of this package in your
+current environment, you can run either of the following commands
+depending on your desired framework:
 
 ```bash
 pip install raw-speech-classification[torch]
