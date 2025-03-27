@@ -8,10 +8,11 @@ SPDX-License-Identifier: GPL-3.0-only
 
 [![PyPI package](https://shields.io/pypi/v/raw-speech-classification.svg?logo=pypi)](https://pypi.org/project/raw-speech-classification)
 
-Trains CNN (or any neural network based) classifiers from raw speech using Keras and
-tests them. The inputs are lists of wav files, where each file is labelled. It then
-creates fixed length signals and processes them. During testing, it computes scores at
-the utterance or speaker levels by averaging the corresponding frame-level scores from
+Trains CNN (or any neural network based) classifiers from raw speech
+using Keras and tests them. The inputs are lists of wav files, where
+each file is labelled. It then creates fixed length signals and
+processes them. During testing, it computes scores at the utterance or
+speaker levels by averaging the corresponding frame-level scores from
 the fixed length signals.
 
 ## Installation
@@ -66,9 +67,9 @@ installed, you can simply run:
 pip install raw-speech-classification
 ```
 
-You will also need to set the `KERAS_BACKEND` environment variable to the correct backend
-before running `rsclf-train` or `rsclf-test` (see below), or globally for the current
-bash session with:
+You will also need to set the `KERAS_BACKEND` environment variable to
+the correct backend before running `rsclf-train` or `rsclf-test` (see
+below), or globally for the current bash session with:
 
 ```bash
 export KERAS_BACKEND=torch
@@ -152,10 +153,11 @@ obtain the following curve in `results/seg-f1/plot.png`:
 
 ## Training schedule
 
-The script uses stochastic gradient descent with 0.5 momentum. It starts with a learning
-rate of 0.1 for a minimum of 5 epochs. Whenever the validation loss reduces by less than
-0.002 between successive epochs, the learning rate is halved. Halving is performed until
-the learning rate reaches 1e-7.
+The script uses stochastic gradient descent with 0.5 momentum. It
+starts with a learning rate of 0.1 for a minimum of 5 epochs. Whenever
+the validation loss reduces by less than 0.002 between successive
+epochs, the learning rate is halved. Halving is performed until the
+learning rate reaches 1e-7.
 
 ## Contributors
 
