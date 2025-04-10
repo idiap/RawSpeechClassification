@@ -24,8 +24,9 @@ the fixed length signals.
 ### Installing from PyPI
 
 If you want to install the last release of this package in your current environment (we
-recommend using Conda to manage virtual environments), you can run either of the
-following commands, depending on your desired framework:
+recommend using Conda to manage virtual environments, e.g. to have a specific version of
+Python), you can run either of the following commands, depending on your desired
+framework:
 
 ```bash
 pip install raw-speech-classification[torch]
