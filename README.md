@@ -98,15 +98,8 @@ Replace `torch` by `tensorflow` or `jax` accordingly.
    Full list files for IEMOCAP are available in the repository as example in
    [`datasets/IEMOCAP/F1_lists`](datasets/IEMOCAP/F1_lists).
 
-1. **If you installed from source with Conda:** A `run` script is available that
-   concatenates all the steps. Run [`run.sh`](run.sh). Provide the model architecture as
-   an argument. See [`model_architecture.py`](rsclf/model_architecture.py) for valid
-   options. Optionally, provide an integer as a count of the number of times the
-   experiment is repeated. This is useful when the same experiment needs to be repeated
-   multiple times with different initialization. The argument defaults to 1.
-
-   **If you installed with pip:** You can run the following commands (give the `--help`
-   option to each command for more details):
+1. You can now run the following commands (use the `--help` option of each command to get
+   more details):
 
    ```bash
    rsclf-wav2feat --wav-list-file list_files/cv.list --feature-dir output/cv_feat --mode train --root path/to/dataset/basedir
@@ -117,17 +110,20 @@ Replace `torch` by `tensorflow` or `jax` accordingly.
    rsclf-plot --output-dir output/ output/cnn_subseg
    ```
 
-This is an example of how to run on the IEMOCAP dataset using conda, assuming conda is
-installed in `~/miniconda3` and your environment is `rsclf`:
+### Using `run.sh` (only with Conda)
+
+`run.sh` allows to run all these steps in one command when using Conda as virtual
+environment manager. This examples shows how to use the IEMOCAP lists shipped in the
+repository:
 
 ```bash
-bash run.sh -C ~/miniconda3 -n rsclf -D ./datasets/IEMOCAP/F1_lists -a seg -o results/seg-f1 -R <IEMOCAP_ROOT>
+bash run.sh -C ~/miniforge3 -n rscl -D datasets/IEMOCAP/F1_lists -a seg -o results/seg-f1 -R <IEMOCAP_DATA_ROOT>
 ```
 
-For instance, `<IEMOCAP_ROOT>` can be `/ssd/data/IEMOCAP` which should
-contain `IEMOCAP_full_release/Session*`.
+Replace `<IEMOCAP_DATA_ROOT>` by the path to the IEMOCAP data directory containing
+`IEMOCAP_full_release/Session*`.
 
-This is an [example](./docs/log.txt) of the log printed to the terminal, and you should
+[Here is an example](./docs/log.txt) of the log printed to the terminal, and you should
 obtain the following curve in `results/seg-f1/plot.png`:
 
 ![Results](./docs/plot.png)
