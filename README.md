@@ -17,32 +17,11 @@ the fixed length signals.
 
 ## Installation
 
-### Installing from source in a virtual environment
-
-To install the following repository from source, depending on the
-Keras backend you want to use, run:
-
-```bash
-pip install -e .[torch]
-```
-
-or
-
-```bash
-pip install -e .[tensorflow]
-```
-
-or
-
-```bash
-pip install -e .[jax]
-```
-
 ### Installing from PyPI
 
-If you want to install the last release of this package in your
-current environment, you can run either of the following commands
-depending on your desired framework:
+If you want to install the last release of this package in your current environment (we
+recommend using Conda to manage virtual environments), you can run either of the
+following commands, depending on your desired framework:
 
 ```bash
 pip install raw-speech-classification[torch]
@@ -65,6 +44,27 @@ installed, you can simply run:
 
 ```bash
 pip install raw-speech-classification
+```
+
+### Installing from source in a virtual environment
+
+To install the following repository from source, clone this repository, then
+run (according to the Keras backend you desire):
+
+```bash
+pip install -e .[torch]
+```
+
+or
+
+```bash
+pip install -e .[tensorflow]
+```
+
+or
+
+```bash
+pip install -e .[jax]
 ```
 
 You will also need to set the `KERAS_BACKEND` environment variable to
