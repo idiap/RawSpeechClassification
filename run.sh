@@ -21,6 +21,7 @@ CONDA_ENV=
 
 spliceSize=25
 arch="subseg"
+OUTPUT="./rscl-output"
 datadir=
 ROOT=""
 
