@@ -1,6 +1,10 @@
 <!--
 SPDX-FileCopyrightText: Copyright © Idiap Research Institute <contact@idiap.ch>
 
+SPDX-FileContributor: S. Pavankumar Dubagunta <pavankumar.dubagunta@idiap.ch>
+SPDX-FileContributor: Olivier Canévet <olivier.canevet@idiap.ch>
+SPDX-FileContributor: Yannick Dayer <yannick.dayer@idiap.ch>
+
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
